@@ -4,780 +4,898 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dashboard Admin</title>
-
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-
+<link rel="stylesheet" href="../css/theme.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
 <style>
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
+:root{
+    --admin-primary:#102a7a;
+    --admin-secondary:#2563eb;
+    --admin-accent:#f59e0b;
+    --admin-bg:#f4f7ff;
+    --admin-text:#0f172a;
+    --admin-muted:#64748b;
+    --admin-card:#ffffff;
+    --admin-border:rgba(148,163,184,.2);
+    --admin-shadow:0 20px 50px rgba(15,23,42,.12);
 }
-
+*{box-sizing:border-box}
+button{width:auto}
 body{
-font-family:'Segoe UI',sans-serif;
-background:#f5f7fb;
-color:#1f2937;
+    margin:0;
+    min-height:100vh;
+    font-family:"Plus Jakarta Sans","Segoe UI",sans-serif;
+    background:
+        radial-gradient(circle at top right, rgba(37,99,235,.14), transparent 24%),
+        linear-gradient(180deg, #fbfcff 0%, var(--admin-bg) 100%);
+    color:var(--admin-text);
 }
-
-/* ================= HEADER ================= */
-
-.header{
-height:60px;
-background:#1e3a8a;
-display:flex;
-align-items:center;
-justify-content:space-between;
-padding:0 25px;
-color:white;
+.shell{
+    width:min(1240px, calc(100% - 32px));
+    margin:0 auto;
+    padding:24px 0 110px;
 }
-
-.logo{
-font-weight:bold;
-font-size:15px;
+.topbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:16px;
+    padding:18px 22px;
+    border-radius:28px;
+    background:rgba(16,42,122,.94);
+    color:#fff;
+    box-shadow:var(--admin-shadow);
 }
-
-.menu{
-display:flex;
-gap:25px;
-align-items:center;
+.brand{
+    display:flex;
+    align-items:center;
+    gap:16px;
 }
-
-.menu a{
-color:white;
-text-decoration:none;
-font-size:14px;
-opacity:.9;
+.brand-icon{
+    width:52px;
+    height:52px;
+    border-radius:18px;
+    display:grid;
+    place-items:center;
+    background:rgba(255,255,255,.14);
+    font-size:1.3rem;
 }
-
-.menu a:hover{
-opacity:1;
+.brand h1{
+    margin:0;
+    font-size:clamp(1.2rem, 3vw, 1.65rem);
 }
-
-.icons{
-display:flex;
-gap:18px;
-font-size:16px;
+.brand p{
+    margin:4px 0 0;
+    color:rgba(255,255,255,.78);
+    font-size:.92rem;
 }
-
-/* ================= LAYOUT ================= */
-
-.container{
-display:grid;
-grid-template-columns:1.4fr 1fr;
-gap:20px;
-padding:20px;
-height:calc(100vh - 60px);
+.toolbar{
+    display:flex;
+    gap:12px;
+    flex-wrap:wrap;
+    justify-content:flex-end;
 }
-
-/* ================= LEFT ================= */
-
-.left{
-background:white;
-border-radius:18px;
-padding:25px;
-overflow:auto;
-box-shadow:0 4px 15px rgba(0,0,0,.05);
+.toolbar a,
+.toolbar button{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    border:none;
+    border-radius:16px;
+    padding:13px 18px;
+    font:inherit;
+    font-weight:800;
+    cursor:pointer;
 }
-
-.welcome{
-margin-bottom:25px;
+.toolbar a{
+    background:rgba(255,255,255,.12);
+    color:#fff;
 }
-
-.welcome h2{
-font-size:28px;
-margin-bottom:5px;
+.toolbar button{
+    background:#fff;
+    color:var(--admin-primary);
 }
-
-.welcome p{
-color:#6b7280;
+.hero{
+    margin-top:22px;
+    padding:30px;
+    border-radius:34px;
+    background:
+        linear-gradient(120deg, rgba(16,42,122,.96), rgba(37,99,235,.9)),
+        url("https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=1600&auto=format&fit=crop") center/cover;
+    color:#fff;
+    box-shadow:var(--admin-shadow);
 }
-
-/* ================= KPI ================= */
-
-.kpis{
-display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:15px;
-margin-bottom:25px;
+.hero h2{
+    margin:0;
+    font-size:clamp(2rem, 5vw, 3.2rem);
+    line-height:1.05;
 }
-
-.card{
-padding:20px;
-border-radius:16px;
-background:#f8fafc;
-display:flex;
-flex-direction:column;
-gap:10px;
+.hero p{
+    margin:14px 0 0;
+    max-width:760px;
+    color:rgba(255,255,255,.86);
+    line-height:1.7;
 }
-
-.card i{
-font-size:22px;
+.hero-actions{
+    margin-top:22px;
+    display:flex;
+    gap:12px;
+    flex-wrap:wrap;
 }
-
-.card h1{
-font-size:28px;
+.hero-actions a{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    padding:13px 16px;
+    border-radius:16px;
+    font-weight:800;
 }
-
-.card p{
-font-size:14px;
-color:#6b7280;
+.hero-actions a.primary{
+    background:#fff;
+    color:var(--admin-primary);
 }
-
-.card:nth-child(1){
-background:#eef2ff;
-color:#4f46e5;
+.hero-actions a.secondary{
+    background:rgba(255,255,255,.14);
+    color:#fff;
 }
-
-.card:nth-child(2){
-background:#ecfeff;
-color:#0891b2;
+.stats{
+    margin-top:22px;
+    display:grid;
+    grid-template-columns:repeat(4, minmax(0, 1fr));
+    gap:16px;
 }
-
-.card:nth-child(3){
-background:#ecfdf5;
-color:#059669;
+.stat-card{
+    background:#fff;
+    border-radius:24px;
+    padding:22px 20px;
+    border:1px solid var(--admin-border);
+    box-shadow:0 14px 32px rgba(15,23,42,.08);
 }
-
-.card:nth-child(4){
-background:#fef3c7;
-color:#d97706;
+.stat-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:12px;
+    margin-bottom:14px;
 }
-
-/* ================= ACTIVITY ================= */
-
-.section-title{
-margin-bottom:15px;
-font-size:18px;
-font-weight:600;
+.stat-top span{
+    color:var(--admin-muted);
+    font-size:.9rem;
+    font-weight:700;
 }
-
-.activities{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:15px;
+.stat-icon{
+    width:46px;
+    height:46px;
+    border-radius:16px;
+    display:grid;
+    place-items:center;
+    color:#fff;
 }
-
-.activity{
-border:1px solid #eee;
-border-radius:14px;
-padding:15px;
-display:flex;
-justify-content:space-between;
-align-items:center;
+.stat-icon.users{background:linear-gradient(135deg,#2563eb,#1d4ed8)}
+.stat-icon.teachers{background:linear-gradient(135deg,#14b8a6,#059669)}
+.stat-icon.students{background:linear-gradient(135deg,#f59e0b,#f97316)}
+.stat-icon.classes{background:linear-gradient(135deg,#7c3aed,#4f46e5)}
+.stat-card h3{
+    margin:0;
+    font-size:2rem;
 }
-
-.activity-left{
-display:flex;
-gap:12px;
-align-items:center;
+.stat-card p{
+    margin:8px 0 0;
+    color:var(--admin-muted);
 }
-
-.activity-icon{
-width:42px;
-height:42px;
-border-radius:12px;
-background:#eef2ff;
-display:flex;
-align-items:center;
-justify-content:center;
-color:#4f46e5;
+.content{
+    margin-top:24px;
+    display:grid;
+    grid-template-columns:minmax(0, 1.3fr) minmax(0, .9fr);
+    gap:20px;
 }
-
-.activity h4{
-font-size:14px;
-margin-bottom:4px;
+.panel{
+    background:var(--admin-card);
+    border:1px solid var(--admin-border);
+    border-radius:28px;
+    padding:22px;
+    box-shadow:0 14px 32px rgba(15,23,42,.08);
 }
-
-.activity p{
-font-size:12px;
-color:#6b7280;
+.panel-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    gap:16px;
+    flex-wrap:wrap;
+    margin-bottom:18px;
 }
-
-.activity small{
-font-size:11px;
-color:#9ca3af;
+.panel-head h3{
+    margin:0;
+    font-size:1.3rem;
 }
-
-/* ================= RIGHT ================= */
-
-.right{
-background:white;
-border-radius:18px;
-padding:20px;
-overflow:auto;
-box-shadow:0 4px 15px rgba(0,0,0,.05);
+.panel-head p{
+    margin:6px 0 0;
+    color:var(--admin-muted);
 }
-
-.search{
-width:100%;
-padding:12px 15px;
-border:1px solid #ddd;
-border-radius:12px;
-margin-bottom:15px;
-outline:none;
-}
-
-.filters{
-display:flex;
-gap:10px;
-margin-bottom:20px;
-}
-
-.filter{
-padding:8px 14px;
-border-radius:20px;
-background:#f3f4f6;
-font-size:13px;
-cursor:pointer;
-border:none;
-}
-
-.filter.active{
-background:#dbeafe;
-color:#1d4ed8;
-}
-
-.user-list{
-display:flex;
-flex-direction:column;
-gap:14px;
-}
-
-.user{
-border:1px solid #eee;
-border-radius:16px;
-padding:14px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-transition:.2s;
-}
-
-.user:hover{
-transform:translateY(-2px);
-box-shadow:0 4px 10px rgba(0,0,0,.05);
-}
-
-.user-left{
-display:flex;
-gap:12px;
-align-items:center;
-}
-
-.avatar{
-width:52px;
-height:52px;
-border-radius:50%;
-background:#1e3a8a;
-color:white;
-display:flex;
-align-items:center;
-justify-content:center;
-font-weight:bold;
-font-size:18px;
-}
-
-.user-name{
-font-weight:600;
-margin-bottom:4px;
-}
-
-.user-email{
-font-size:12px;
-color:#6b7280;
-margin-bottom:6px;
-}
-
-.badges{
-display:flex;
-gap:8px;
-}
-
-.badge{
-padding:4px 10px;
-border-radius:20px;
-font-size:11px;
-font-weight:600;
-}
-
-.docente{
-background:#dbeafe;
-color:#1d4ed8;
-}
-
-.estudiante{
-background:#fef3c7;
-color:#b45309;
-}
-
-.admin{
-background:#dcfce7;
-color:#15803d;
-}
-
-.estado{
-background:#fee2e2;
-color:#dc2626;
-}
-
-.estado.activo{
-background:#dcfce7;
-color:#16a34a;
-}
-
-.actions{
-display:flex;
-flex-direction:column;
-gap:8px;
-}
-
-.btn{
-border:none;
-padding:7px 12px;
-border-radius:10px;
-font-size:12px;
-cursor:pointer;
-}
-
-.edit{
-background:#eef2ff;
-color:#4f46e5;
-}
-
-.delete{
-background:#fee2e2;
-color:#dc2626;
-}
-
-/* ================= CHART ================= */
-
 .chart-box{
-margin-top:25px;
-background:#fff;
-border:1px solid #eee;
-border-radius:16px;
-padding:15px;
+    min-height:320px;
 }
-
-/* ================= RESPONSIVE ================= */
-
-@media(max-width:1100px){
-
-.container{
-grid-template-columns:1fr;
+.activity-list,
+.user-list{
+    display:flex;
+    flex-direction:column;
+    gap:14px;
 }
-
-.kpis{
-grid-template-columns:repeat(2,1fr);
+.activity-item,
+.user-card{
+    border:1px solid rgba(148,163,184,.18);
+    border-radius:22px;
+    padding:16px;
+    background:#fff;
 }
-
-.activities{
-grid-template-columns:1fr;
+.activity-item{
+    display:flex;
+    justify-content:space-between;
+    gap:14px;
+    align-items:center;
 }
-
+.activity-left{
+    display:flex;
+    gap:14px;
+    align-items:center;
 }
-
+.activity-icon{
+    width:46px;
+    height:46px;
+    border-radius:16px;
+    display:grid;
+    place-items:center;
+    background:#e8f0ff;
+    color:var(--admin-primary);
+}
+.activity-item h4,
+.user-card h4{
+    margin:0;
+}
+.activity-item p,
+.user-card p{
+    margin:6px 0 0;
+    color:var(--admin-muted);
+    line-height:1.5;
+}
+.activity-meta{
+    color:var(--admin-muted);
+    font-size:.85rem;
+    font-weight:700;
+}
+.tools{
+    display:grid;
+    gap:12px;
+    margin-bottom:16px;
+}
+.search{
+    width:100%;
+    padding:14px 16px;
+    border-radius:16px;
+    border:1px solid rgba(148,163,184,.24);
+    font:inherit;
+}
+.filters{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+}
+.filter{
+    border:none;
+    border-radius:999px;
+    padding:10px 14px;
+    font:inherit;
+    font-weight:800;
+    color:var(--admin-muted);
+    background:#eef4ff;
+    cursor:pointer;
+}
+.filter.active{
+    background:var(--admin-primary);
+    color:#fff;
+}
+.user-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:14px;
+}
+.avatar{
+    width:52px;
+    height:52px;
+    border-radius:18px;
+    display:grid;
+    place-items:center;
+    background:linear-gradient(135deg,#1d4ed8,#2563eb);
+    color:#fff;
+    font-weight:800;
+    font-size:1.1rem;
+}
+.user-main{
+    display:flex;
+    gap:14px;
+}
+.badges{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+    margin-top:10px;
+}
+.badge{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    border-radius:999px;
+    padding:7px 10px;
+    font-size:.78rem;
+    font-weight:800;
+}
+.badge.role-admin{background:#dcfce7;color:#166534}
+.badge.role-docente{background:#dbeafe;color:#1d4ed8}
+.badge.role-estudiante{background:#fef3c7;color:#b45309}
+.badge.status{background:#eff6ff;color:#2563eb}
+.user-actions{
+    display:flex;
+    gap:10px;
+    margin-top:16px;
+}
+.user-actions button{
+    flex:1;
+    border:none;
+    border-radius:14px;
+    padding:12px;
+    font:inherit;
+    font-weight:800;
+    cursor:pointer;
+}
+.btn-edit{background:#e8f0ff;color:var(--admin-primary)}
+.btn-delete{background:#fee2e2;color:#b91c1c}
+.empty{
+    text-align:center;
+    color:var(--admin-muted);
+    padding:22px 12px;
+}
+.modal{
+    position:fixed;
+    inset:0;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:16px;
+    background:rgba(15,23,42,.5);
+    z-index:50;
+}
+.modal.open{display:flex}
+.modal-card{
+    width:min(520px, 100%);
+    background:#fff;
+    border-radius:28px;
+    padding:24px;
+    box-shadow:var(--admin-shadow);
+}
+.modal-card h3{
+    margin:0 0 8px;
+}
+.modal-card p{
+    margin:0 0 18px;
+    color:var(--admin-muted);
+}
+.form-grid{
+    display:grid;
+    gap:14px;
+}
+.form-grid input,
+.form-grid select{
+    width:100%;
+    padding:14px 16px;
+    border-radius:16px;
+    border:1px solid rgba(148,163,184,.24);
+    font:inherit;
+}
+.modal-actions{
+    margin-top:18px;
+    display:flex;
+    gap:10px;
+}
+.modal-actions button{
+    flex:1;
+    border:none;
+    border-radius:16px;
+    padding:13px 16px;
+    font:inherit;
+    font-weight:800;
+    cursor:pointer;
+}
+.btn-save{background:var(--admin-primary); color:#fff}
+.btn-cancel{background:#e2e8f0; color:#0f172a}
+.bottom-nav{
+    position:fixed;
+    left:16px;
+    right:16px;
+    bottom:16px;
+    display:grid;
+    grid-template-columns:repeat(4, minmax(0, 1fr));
+    gap:10px;
+    padding:12px;
+    border-radius:24px;
+    background:rgba(255,255,255,.92);
+    border:1px solid rgba(148,163,184,.18);
+    box-shadow:0 14px 40px rgba(15,23,42,.12);
+    backdrop-filter:blur(10px);
+}
+.bottom-nav a{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+    min-height:58px;
+    border-radius:18px;
+    color:var(--admin-muted);
+    font-size:.8rem;
+    font-weight:800;
+    text-decoration:none;
+}
+.bottom-nav a.active{
+    background:#e8f0ff;
+    color:var(--admin-primary);
+}
+@media (max-width: 1080px){
+    .stats{grid-template-columns:repeat(2, minmax(0, 1fr))}
+    .content{grid-template-columns:1fr}
+}
+@media (max-width: 760px){
+    .shell{width:min(100% - 24px, 1240px); padding-top:16px}
+    .topbar{padding:18px; border-radius:24px}
+    .toolbar{width:100%}
+    .toolbar a,
+    .toolbar button{flex:1}
+    .hero{padding:24px}
+    .stats{grid-template-columns:1fr}
+    .user-top,
+    .activity-item{flex-direction:column; align-items:flex-start}
+    .user-actions,
+    .modal-actions{flex-direction:column}
+    .bottom-nav{
+        left:10px;
+        right:10px;
+        bottom:10px;
+        gap:8px;
+        padding:10px;
+    }
+    .bottom-nav a{min-height:54px; font-size:.75rem}
+}
 </style>
 </head>
-
 <body>
 
-<!-- HEADER -->
-<div class="header">
+<main class="shell">
+    <header class="topbar">
+        <div class="brand">
+            <div class="brand-icon">
+                <i class="fa-solid fa-shield-halved"></i>
+            </div>
+            <div>
+                <h1>Panel administrativo</h1>
+                <p id="adminSubtitle">Supervisión general del sistema y usuarios activos.</p>
+            </div>
+        </div>
 
-<div class="logo">
-<i class="fa-solid fa-graduation-cap"></i>
-Educational Control
+        <div class="toolbar">
+            <a href="reportes-admin.html">
+                <i class="fa-solid fa-chart-column"></i>
+                Reportes
+            </a>
+            <button type="button" onclick="logout()">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                Cerrar sesión
+            </button>
+        </div>
+    </header>
+
+    <section class="hero">
+        <h2>Administra usuarios, actividad y crecimiento institucional desde un solo panel.</h2>
+        <p>
+            Este resumen está optimizado para escritorio y móvil, con accesos directos a reportes y un directorio de usuarios editable sin romper datos existentes.
+        </p>
+        <div class="hero-actions">
+            <a class="primary" href="reportes-admin.html">
+                <i class="fa-solid fa-chart-pie"></i>
+                Ver reportes
+            </a>
+            <a class="secondary" href="clases-admin.html">
+                <i class="fa-solid fa-book-open"></i>
+                Revisar clases
+            </a>
+        </div>
+    </section>
+
+    <section class="stats">
+        <article class="stat-card">
+            <div class="stat-top">
+                <span>Usuarios</span>
+                <div class="stat-icon users"><i class="fa-solid fa-users"></i></div>
+            </div>
+            <h3 id="usuarios">0</h3>
+            <p>Registros totales dentro de la plataforma.</p>
+        </article>
+        <article class="stat-card">
+            <div class="stat-top">
+                <span>Docentes</span>
+                <div class="stat-icon teachers"><i class="fa-solid fa-chalkboard-user"></i></div>
+            </div>
+            <h3 id="docentes">0</h3>
+            <p>Personal académico gestionando clases.</p>
+        </article>
+        <article class="stat-card">
+            <div class="stat-top">
+                <span>Estudiantes</span>
+                <div class="stat-icon students"><i class="fa-solid fa-user-graduate"></i></div>
+            </div>
+            <h3 id="estudiantes">0</h3>
+            <p>Alumnos creados dentro del sistema.</p>
+        </article>
+        <article class="stat-card">
+            <div class="stat-top">
+                <span>Clases</span>
+                <div class="stat-icon classes"><i class="fa-solid fa-book-open-reader"></i></div>
+            </div>
+            <h3 id="clases">0</h3>
+            <p>Materias y secciones actualmente activas.</p>
+        </article>
+    </section>
+
+    <section class="content">
+        <div style="display:grid; gap:20px;">
+            <article class="panel chart-box">
+                <div class="panel-head">
+                    <div>
+                        <h3>Resumen institucional</h3>
+                        <p>Comparativo rápido de usuarios, docentes, estudiantes y clases.</p>
+                    </div>
+                </div>
+                <canvas id="chart"></canvas>
+            </article>
+
+            <article class="panel">
+                <div class="panel-head">
+                    <div>
+                        <h3>Actividad reciente</h3>
+                        <p>Últimos registros de usuarios y clases detectados por el sistema.</p>
+                    </div>
+                </div>
+                <div id="activityList" class="activity-list">
+                    <div class="empty">Cargando actividad...</div>
+                </div>
+            </article>
+        </div>
+
+        <article class="panel">
+            <div class="panel-head">
+                <div>
+                    <h3>Directorio de usuarios</h3>
+                    <p>Filtra, busca y actualiza usuarios sin perder correo ni rol existentes.</p>
+                </div>
+            </div>
+
+            <div class="tools">
+                <input id="search" class="search" type="text" placeholder="Buscar por nombre o correo...">
+                <div class="filters">
+                    <button class="filter active" type="button" data-role="todos">Todos</button>
+                    <button class="filter" type="button" data-role="admin">Admins</button>
+                    <button class="filter" type="button" data-role="docente">Docentes</button>
+                    <button class="filter" type="button" data-role="estudiante">Estudiantes</button>
+                </div>
+            </div>
+
+            <div id="userList" class="user-list">
+                <div class="empty">Cargando usuarios...</div>
+            </div>
+        </article>
+    </section>
+</main>
+
+<div id="editModal" class="modal">
+    <div class="modal-card">
+        <h3>Editar usuario</h3>
+        <p>Actualiza la información básica. La contraseña es opcional.</p>
+
+        <form id="editForm" class="form-grid">
+            <input id="editId" type="hidden">
+            <input id="editNombre" type="text" placeholder="Nombre completo" required>
+            <input id="editCorreo" type="email" placeholder="Correo electrónico" required>
+            <select id="editRol" required>
+                <option value="admin">Admin</option>
+                <option value="docente">Docente</option>
+                <option value="estudiante">Estudiante</option>
+            </select>
+            <input id="editPassword" type="password" placeholder="Nueva contraseña (opcional)">
+        </form>
+
+        <div class="modal-actions">
+            <button class="btn-save" type="button" onclick="guardarUsuario()">Guardar cambios</button>
+            <button class="btn-cancel" type="button" onclick="cerrarModal()">Cancelar</button>
+        </div>
+    </div>
 </div>
 
-<div class="menu">
-<a href="#">Inicio</a>
-<a href="reportes-admin.html">Reportes</a>
-<a href="#">Administrador</a>
-</div>
-
-<div class="icons">
-<i class="fa-regular fa-bell"></i>
-<i class="fa-solid fa-gear"></i>
-</div>
-
-</div>
-
-<!-- CONTENT -->
-<div class="container">
-
-<!-- LEFT -->
-<div class="left">
-
-<div class="welcome">
-<h2>Hola, Administrador 👋</h2>
-<p>Aquí tienes un resumen del sistema hoy.</p>
-</div>
-
-<!-- KPIS -->
-<div class="kpis">
-
-<div class="card">
-<i class="fa-solid fa-chart-line"></i>
-<h1 id="usuarios">0</h1>
-<p>Usuarios</p>
-</div>
-
-<div class="card">
-<i class="fa-solid fa-chalkboard-user"></i>
-<h1 id="docentes">0</h1>
-<p>Total de docentes</p>
-</div>
-
-<div class="card">
-<i class="fa-solid fa-user-graduate"></i>
-<h1 id="estudiantes">0</h1>
-<p>Total de estudiantes</p>
-</div>
-
-<div class="card">
-<i class="fa-solid fa-book-open"></i>
-<h1 id="clases">0</h1>
-<p>Total de clases</p>
-</div>
-
-</div>
-
-<!-- ACTIVIDAD -->
-<div class="section-title">
-Actividad reciente
-</div>
-
-<div class="activities" id="actividad"></div>
-
-<!-- CHART -->
-<div class="chart-box">
-<canvas id="chart"></canvas>
-</div>
-
-</div>
-
-<!-- RIGHT -->
-<div class="right">
-
-<input
-type="text"
-class="search"
-id="search"
-placeholder="Buscar por nombre o email..."
->
-
-<div class="filters">
-<button class="filter active" onclick="filtrar('todos')">
-Todos
-</button>
-
-<button class="filter" onclick="filtrar('docente')">
-Docentes
-</button>
-
-<button class="filter" onclick="filtrar('estudiante')">
-Estudiantes
-</button>
-
-<button class="filter" onclick="filtrar('admin')">
-Admins
-</button>
-</div>
-
-<div class="section-title">
-Directorio de Usuarios
-</div>
-
-<div class="user-list" id="users"></div>
-
-</div>
-
-</div>
+<nav class="bottom-nav">
+    <a href="dashboard-admin.html" class="active">
+        <i class="fa-solid fa-house"></i>
+        Inicio
+    </a>
+    <a href="clases-admin.html">
+        <i class="fa-solid fa-book"></i>
+        Clases
+    </a>
+    <a href="reportes-admin.html">
+        <i class="fa-solid fa-chart-column"></i>
+        Reportes
+    </a>
+    <a href="#" onclick="logout(); return false;">
+        <i class="fa-regular fa-user"></i>
+        Salir
+    </a>
+</nav>
 
 <script>
+let chartInstance = null;
+let usuariosGlobal = [];
+let filtroRol = "todos";
 
-let usuariosGlobal=[];
-
-// ================= DASHBOARD =================
-
-fetch("/api/admin/dashboard",{
-credentials:"include"
-})
-.then(r=>r.json())
-.then(d=>{
-
-document.getElementById("usuarios").innerText=d.usuarios;
-document.getElementById("docentes").innerText=d.docentes;
-document.getElementById("estudiantes").innerText=d.estudiantes;
-document.getElementById("clases").innerText=d.clases;
-
-// CHART
-new Chart(document.getElementById("chart"),{
-
-type:"bar",
-
-data:{
-labels:["Usuarios","Estudiantes","Docentes","Clases"],
-datasets:[{
-data:[
-d.usuarios,
-d.estudiantes,
-d.docentes,
-d.clases
-],
-borderRadius:8
-}]
-},
-
-options:{
-responsive:true,
-plugins:{
-legend:{
-display:false
-}
-}
+function escapeHtml(value) {
+    return String(value || "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#39;");
 }
 
-});
+function apiJson(url, options) {
+    return fetch(url, {
+        credentials: "include",
+        ...options,
+    }).then(async (response) => {
+        if (response.status === 401 || response.status === 403) {
+            window.location.href = "/login.html";
+            throw new Error("Sesión no válida");
+        }
 
-});
-
-// ================= USERS =================
-
-function cargarUsuarios(){
-
-fetch("/api/admin/usuarios",{
-credentials:"include"
-})
-.then(r=>r.json())
-.then(data=>{
-
-usuariosGlobal=data;
-renderUsuarios(data);
-
-});
-
+        const data = await response.json().catch(() => ({}));
+        if (!response.ok) {
+            throw new Error(data.message || "Error en la solicitud");
+        }
+        return data;
+    });
 }
 
-function renderUsuarios(data){
+function renderChart(data) {
+    const ctx = document.getElementById("chart");
+    if (chartInstance) {
+        chartInstance.destroy();
+    }
 
-let box=document.getElementById("users");
-
-box.innerHTML="";
-
-data.forEach(u=>{
-
-let tipo=u.rol;
-
-box.innerHTML+=`
-
-<div class="user">
-
-<div class="user-left">
-
-<div class="avatar">
-${u.nombre.charAt(0).toUpperCase()}
-</div>
-
-<div>
-
-<div class="user-name">
-${u.nombre}
-</div>
-
-<div class="user-email">
-${u.correo}
-</div>
-
-<div class="badges">
-
-<span class="badge ${tipo}">
-${u.rol}
-</span>
-
-<span class="badge estado activo">
-Activo
-</span>
-
-</div>
-
-</div>
-
-</div>
-
-<div class="actions">
-
-<button
-class="btn edit"
-onclick="editarUsuario(${u.id})"
->
-Editar
-</button>
-
-<button
-class="btn delete"
-onclick="eliminarUsuario(${u.id})"
->
-Eliminar
-</button>
-
-</div>
-
-</div>
-
-`;
-
-});
-
+    chartInstance = new Chart(ctx, {
+        type: "bar",
+        data: {
+            labels: ["Usuarios", "Estudiantes", "Docentes", "Clases"],
+            datasets: [{
+                data: [data.usuarios || 0, data.estudiantes || 0, data.docentes || 0, data.clases || 0],
+                backgroundColor: ["#2563eb", "#f59e0b", "#14b8a6", "#7c3aed"],
+                borderRadius: 12,
+            }],
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false,
+                },
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        precision: 0,
+                    },
+                },
+            },
+        },
+    });
 }
 
-// ================= FILTROS =================
+function renderActividad(items) {
+    const list = document.getElementById("activityList");
+    if (!Array.isArray(items) || !items.length) {
+        list.innerHTML = '<div class="empty">No hay actividad reciente para mostrar.</div>';
+        return;
+    }
 
-function filtrar(tipo){
-
-document.querySelectorAll(".filter")
-.forEach(b=>b.classList.remove("active"));
-
-event.target.classList.add("active");
-
-if(tipo==="todos"){
-renderUsuarios(usuariosGlobal);
-return;
+    list.innerHTML = items.map((item) => {
+        const icon = item.tipo === "usuario" ? "fa-user" : "fa-book";
+        const meta = item.tipo === "usuario" ? "Nuevo usuario" : "Clase registrada";
+        return `
+            <article class="activity-item">
+                <div class="activity-left">
+                    <div class="activity-icon"><i class="fa-solid ${icon}"></i></div>
+                    <div>
+                        <h4>${escapeHtml(item.titulo)}</h4>
+                        <p>${escapeHtml(item.descripcion || "Sin detalle adicional")}</p>
+                    </div>
+                </div>
+                <div class="activity-meta">${meta}</div>
+            </article>
+        `;
+    }).join("");
 }
 
-let filtrados=usuariosGlobal.filter(
-u=>u.rol===tipo
-);
-
-renderUsuarios(filtrados);
-
+function usuariosFiltrados() {
+    const texto = document.getElementById("search").value.trim().toLowerCase();
+    return usuariosGlobal.filter((usuario) => {
+        const coincideRol = filtroRol === "todos" || usuario.rol === filtroRol;
+        const coincideTexto = !texto ||
+            usuario.nombre.toLowerCase().includes(texto) ||
+            usuario.correo.toLowerCase().includes(texto);
+        return coincideRol && coincideTexto;
+    });
 }
 
-// ================= SEARCH =================
+function renderUsuarios(data) {
+    const list = document.getElementById("userList");
+    if (!Array.isArray(data) || !data.length) {
+        list.innerHTML = '<div class="empty">No hay usuarios para los filtros aplicados.</div>';
+        return;
+    }
 
-document.getElementById("search")
-.addEventListener("input",e=>{
+    list.innerHTML = data.map((usuario) => `
+        <article class="user-card">
+            <div class="user-top">
+                <div class="user-main">
+                    <div class="avatar">${escapeHtml((usuario.nombre || "?").charAt(0).toUpperCase())}</div>
+                    <div>
+                        <h4>${escapeHtml(usuario.nombre)}</h4>
+                        <p>${escapeHtml(usuario.correo)}</p>
+                        <div class="badges">
+                            <span class="badge role-${escapeHtml(usuario.rol)}">${escapeHtml(usuario.rol)}</span>
+                            <span class="badge status"><i class="fa-solid fa-circle-check"></i> Activo</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-let texto=e.target.value.toLowerCase();
-
-let filtrados=usuariosGlobal.filter(u=>
-
-u.nombre.toLowerCase().includes(texto)
-||
-u.correo.toLowerCase().includes(texto)
-
-);
-
-renderUsuarios(filtrados);
-
-});
-
-// ================= ELIMINAR =================
-
-function eliminarUsuario(id){
-
-if(!confirm("¿Eliminar usuario?")) return;
-
-fetch(`/api/admin/usuarios/${id}`,{
-
-method:"DELETE",
-credentials:"include"
-
-})
-.then(r=>r.json())
-.then(d=>{
-
-alert(d.message);
-cargarUsuarios();
-
-});
-
+            <div class="user-actions">
+                <button class="btn-edit" type="button" onclick="abrirEditar(${usuario.id})">
+                    <i class="fa-solid fa-pen"></i>
+                    Editar
+                </button>
+                <button class="btn-delete" type="button" onclick="eliminarUsuario(${usuario.id})">
+                    <i class="fa-solid fa-trash"></i>
+                    Eliminar
+                </button>
+            </div>
+        </article>
+    `).join("");
 }
 
-// ================= EDITAR =================
-
-function editarUsuario(id){
-
-let nombre=prompt("Nuevo nombre");
-if(!nombre) return;
-
-fetch(`/api/admin/usuarios/${id}`,{
-
-method:"PUT",
-
-headers:{
-"Content-Type":"application/json"
-},
-
-credentials:"include",
-
-body:JSON.stringify({
-nombre:nombre,
-correo:"temp@gmail.com",
-rol:"estudiante"
-})
-
-})
-.then(r=>r.json())
-.then(d=>{
-
-alert(d.message);
-cargarUsuarios();
-
-});
-
+function refrescarListaUsuarios() {
+    renderUsuarios(usuariosFiltrados());
 }
 
-// ================= ACTIVIDAD =================
+function abrirEditar(id) {
+    const usuario = usuariosGlobal.find((item) => item.id === id);
+    if (!usuario) return;
 
-fetch("/api/admin/clases",{
-credentials:"include"
-})
-.then(r=>r.json())
-.then(data=>{
+    document.getElementById("editId").value = usuario.id;
+    document.getElementById("editNombre").value = usuario.nombre || "";
+    document.getElementById("editCorreo").value = usuario.correo || "";
+    document.getElementById("editRol").value = usuario.rol || "estudiante";
+    document.getElementById("editPassword").value = "";
+    document.getElementById("editModal").classList.add("open");
+}
 
-let box=document.getElementById("actividad");
+function cerrarModal() {
+    document.getElementById("editModal").classList.remove("open");
+}
 
-data.slice(0,4).forEach(c=>{
+async function guardarUsuario() {
+    const id = Number(document.getElementById("editId").value);
+    const payload = {
+        nombre: document.getElementById("editNombre").value.trim(),
+        correo: document.getElementById("editCorreo").value.trim(),
+        rol: document.getElementById("editRol").value,
+    };
 
-box.innerHTML+=`
+    const password = document.getElementById("editPassword").value;
+    if (password.trim()) {
+        payload.password = password.trim();
+    }
 
-<div class="activity">
+    try {
+        const data = await apiJson(`/api/admin/usuarios/${id}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
+        });
+        alert(data.message || "Usuario actualizado");
+        cerrarModal();
+        await cargarUsuarios();
+    } catch (error) {
+        alert(error.message || "No fue posible actualizar el usuario");
+    }
+}
 
-<div class="activity-left">
+async function eliminarUsuario(id) {
+    if (!confirm("¿Eliminar este usuario?")) return;
 
-<div class="activity-icon">
-<i class="fa-solid fa-book"></i>
-</div>
+    try {
+        const data = await apiJson(`/api/admin/usuarios/${id}`, {
+            method: "DELETE",
+        });
+        alert(data.message || "Usuario eliminado");
+        await cargarUsuarios();
+    } catch (error) {
+        alert(error.message || "No fue posible eliminar el usuario");
+    }
+}
 
-<div>
-<h4>${c.materia}</h4>
-<p>${c.docente}</p>
-</div>
+async function cargarUsuarios() {
+    usuariosGlobal = await apiJson("/api/admin/usuarios");
+    refrescarListaUsuarios();
+}
 
-</div>
+async function cargarDashboard() {
+    try {
+        const [dashboard, actividad] = await Promise.all([
+            apiJson("/api/admin/dashboard"),
+            apiJson("/api/admin/actividad"),
+        ]);
 
-<small>
-${c.estudiantes} alumnos
-</small>
+        document.getElementById("usuarios").textContent = dashboard.usuarios || 0;
+        document.getElementById("docentes").textContent = dashboard.docentes || 0;
+        document.getElementById("estudiantes").textContent = dashboard.estudiantes || 0;
+        document.getElementById("clases").textContent = dashboard.clases || 0;
+        renderChart(dashboard);
+        renderActividad(actividad);
+        document.getElementById("adminSubtitle").textContent =
+            "Resumen en vivo de " + (dashboard.usuarios || 0) + " usuarios registrados.";
+    } catch (error) {
+        document.getElementById("activityList").innerHTML =
+            '<div class="empty">No fue posible cargar la actividad reciente.</div>';
+    }
+}
 
-</div>
+function logout() {
+    fetch("/api/auth/logout", {
+        method: "POST",
+        credentials: "include",
+    }).finally(() => {
+        window.location.href = "/login.html";
+    });
+}
 
-`;
-
+document.querySelectorAll(".filter").forEach((button) => {
+    button.addEventListener("click", () => {
+        document.querySelectorAll(".filter").forEach((item) => item.classList.remove("active"));
+        button.classList.add("active");
+        filtroRol = button.dataset.role || "todos";
+        refrescarListaUsuarios();
+    });
 });
 
+document.getElementById("search").addEventListener("input", refrescarListaUsuarios);
+document.getElementById("editModal").addEventListener("click", (event) => {
+    if (event.target.id === "editModal") {
+        cerrarModal();
+    }
 });
 
-// INIT
-cargarUsuarios();
-
+Promise.all([cargarDashboard(), cargarUsuarios()]).catch(() => {});
 </script>
 
 </body>

@@ -3,415 +3,647 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Dashboard Docente</title>
-
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-
+<link rel="stylesheet" href="../css/theme.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:'Segoe UI',sans-serif;
+:root{
+    --doc-primary:#0f2c82;
+    --doc-primary-2:#2563eb;
+    --doc-accent:#f97316;
+    --doc-bg:#eef4ff;
+    --doc-text:#0f172a;
+    --doc-muted:#64748b;
+    --doc-card:#ffffff;
+    --doc-border:rgba(148,163,184,.22);
+    --doc-shadow:0 20px 50px rgba(15,23,42,.12);
 }
-
+*{box-sizing:border-box}
+button{width:auto}
 body{
-    background:#f4f5f7;
+    margin:0;
     min-height:100vh;
+    font-family:"Plus Jakarta Sans","Segoe UI",sans-serif;
+    color:var(--doc-text);
+    background:
+        radial-gradient(circle at top left, rgba(37,99,235,.18), transparent 28%),
+        linear-gradient(180deg, #f8fbff 0%, var(--doc-bg) 100%);
 }
-
-/* ===== TOPBAR ===== */
-
+a{text-decoration:none}
+.shell{
+    width:min(1200px, calc(100% - 32px));
+    margin:0 auto;
+    padding:24px 0 110px;
+}
 .topbar{
-    background:#0f2c82;
-    height:90px;
-    padding:20px;
     display:flex;
     justify-content:space-between;
     align-items:center;
-    color:white;
-    position:sticky;
-    top:0;
-    z-index:100;
+    gap:16px;
+    padding:18px 22px;
+    border-radius:28px;
+    background:rgba(15,44,130,.92);
+    color:#fff;
+    box-shadow:var(--doc-shadow);
+    backdrop-filter:blur(10px);
 }
-
-.topbar-left{
+.brand{
     display:flex;
     align-items:center;
-    gap:15px;
+    gap:16px;
 }
-
-.circle-btn{
-    width:38px;
-    height:38px;
-    border-radius:50%;
-    background:white;
-    color:#0f2c82;
+.brand-badge{
+    width:52px;
+    height:52px;
+    border-radius:18px;
+    display:grid;
+    place-items:center;
+    background:rgba(255,255,255,.16);
+    font-size:22px;
+}
+.brand h1{
+    margin:0;
+    font-size:clamp(1.2rem, 3vw, 1.65rem);
+}
+.brand p{
+    margin:4px 0 0;
+    color:rgba(255,255,255,.78);
+    font-size:.92rem;
+}
+.toolbar{
     display:flex;
+    align-items:center;
+    gap:12px;
+    flex-wrap:wrap;
+    justify-content:flex-end;
+}
+.ghost-btn,
+.primary-btn{
+    display:inline-flex;
     align-items:center;
     justify-content:center;
-    font-size:18px;
-}
-
-.topbar h2{
-    font-size:20px;
-    font-weight:600;
-}
-
-.top-icons{
-    font-size:22px;
-}
-
-/* BOTÓN SALIR */
-
-.logout-btn{
-    background:white;
-    color:#0f2c82;
+    gap:10px;
     border:none;
-    padding:10px 16px;
-    border-radius:12px;
-    font-weight:600;
+    border-radius:16px;
+    padding:13px 18px;
+    font:inherit;
+    font-weight:700;
     cursor:pointer;
-    display:flex;
-    align-items:center;
-    gap:8px;
-    transition:0.3s;
+    transition:transform .2s ease, box-shadow .2s ease, background .2s ease;
 }
-
-.logout-btn:hover{
-    background:#dbeafe;
-    transform:scale(1.03);
+.ghost-btn{
+    background:rgba(255,255,255,.14);
+    color:#fff;
 }
-
-/* ===== HERO ===== */
-
+.primary-btn{
+    background:#fff;
+    color:var(--doc-primary);
+}
+.ghost-btn:hover,
+.primary-btn:hover{
+    transform:translateY(-1px);
+}
 .hero{
-    width:90%;
-    height:180px;
-    margin:20px auto;
-    border-radius:20px;
+    margin-top:22px;
+    padding:30px;
+    border-radius:32px;
     overflow:hidden;
     position:relative;
-    background:url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1200&auto=format&fit=crop') center/cover;
+    background:
+        linear-gradient(120deg, rgba(15,44,130,.95), rgba(37,99,235,.88)),
+        url("https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1600&auto=format&fit=crop") center/cover;
+    color:#fff;
+    box-shadow:var(--doc-shadow);
 }
-
 .hero::after{
-    content:'';
+    content:"";
     position:absolute;
-    inset:0;
-    background:rgba(0,0,0,0.35);
+    right:-60px;
+    bottom:-70px;
+    width:220px;
+    height:220px;
+    border-radius:50%;
+    background:rgba(249,115,22,.24);
+    filter:blur(8px);
 }
-
 .hero-content{
-    position:absolute;
-    z-index:2;
-    color:white;
-    left:25px;
-    bottom:25px;
+    position:relative;
+    z-index:1;
+    max-width:720px;
 }
-
-.hero-content h1{
-    font-size:30px;
-    margin-bottom:10px;
-}
-
-/* ===== CARDS ===== */
-
-.stats{
-    width:90%;
-    margin:25px auto 120px;
-    display:flex;
-    flex-direction:column;
-    gap:18px;
-}
-
-.stat-card{
-    background:white;
-    border-radius:18px;
-    padding:14px;
-    display:flex;
-    align-items:center;
-    gap:15px;
-    box-shadow:0 4px 12px rgba(0,0,0,0.08);
-    transition:0.3s;
-}
-
-.stat-card:hover{
-    transform:translateY(-3px);
-}
-
-.stat-card img{
-    width:95px;
-    height:95px;
-    border-radius:14px;
-    object-fit:cover;
-}
-
-.stat-info{
-    flex:1;
-}
-
-.stat-title{
-    display:flex;
+.eyebrow{
+    display:inline-flex;
     align-items:center;
     gap:8px;
-    margin-bottom:10px;
+    padding:8px 12px;
+    border-radius:999px;
+    background:rgba(255,255,255,.12);
+    font-size:.82rem;
+    font-weight:700;
+    letter-spacing:.02em;
 }
-
-.stat-title span{
-    font-size:20px;
+.hero h2{
+    margin:16px 0 12px;
+    font-size:clamp(2rem, 5vw, 3.4rem);
+    line-height:1.05;
 }
-
-.stat-info h3{
-    font-size:24px;
-    color:#0f2c82;
+.hero p{
+    margin:0;
+    max-width:620px;
+    color:rgba(255,255,255,.86);
+    line-height:1.7;
 }
-
-.stat-info p{
-    color:#6b7280;
-    font-size:14px;
-    line-height:1.5;
+.hero-actions{
+    margin-top:22px;
+    display:flex;
+    gap:12px;
+    flex-wrap:wrap;
 }
-
-/* ===== NAVBAR ===== */
-
+.hero-link{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    padding:13px 16px;
+    border-radius:16px;
+    background:rgba(255,255,255,.14);
+    color:#fff;
+    font-weight:700;
+}
+.hero-link.alt{
+    background:#fff;
+    color:var(--doc-primary);
+}
+.stats{
+    margin-top:24px;
+    display:grid;
+    grid-template-columns:repeat(4, minmax(0, 1fr));
+    gap:16px;
+}
+.stat-card{
+    background:rgba(255,255,255,.9);
+    border:1px solid rgba(255,255,255,.55);
+    border-radius:24px;
+    padding:22px 20px;
+    box-shadow:0 14px 40px rgba(15,23,42,.08);
+}
+.stat-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:12px;
+    margin-bottom:14px;
+}
+.stat-top span{
+    color:var(--doc-muted);
+    font-size:.92rem;
+    font-weight:700;
+}
+.stat-icon{
+    width:46px;
+    height:46px;
+    border-radius:16px;
+    display:grid;
+    place-items:center;
+    color:#fff;
+    font-size:1.1rem;
+}
+.stat-icon.clases{background:linear-gradient(135deg,#2563eb,#1d4ed8)}
+.stat-icon.estudiantes{background:linear-gradient(135deg,#059669,#10b981)}
+.stat-icon.tareas{background:linear-gradient(135deg,#f97316,#fb7185)}
+.stat-icon.materiales{background:linear-gradient(135deg,#7c3aed,#4f46e5)}
+.stat-card h3{
+    margin:0;
+    font-size:2rem;
+}
+.stat-card p{
+    margin:8px 0 0;
+    color:var(--doc-muted);
+    font-size:.94rem;
+}
+.section-head{
+    margin:34px 0 18px;
+    display:flex;
+    align-items:flex-end;
+    justify-content:space-between;
+    gap:16px;
+    flex-wrap:wrap;
+}
+.section-head h3{
+    margin:0;
+    font-size:1.4rem;
+}
+.section-head p{
+    margin:6px 0 0;
+    color:var(--doc-muted);
+}
+.section-head a{
+    color:var(--doc-primary);
+    font-weight:800;
+}
+.classes-grid{
+    display:grid;
+    grid-template-columns:repeat(3, minmax(0, 1fr));
+    gap:18px;
+}
+.class-card,
+.empty-card{
+    background:var(--doc-card);
+    border:1px solid var(--doc-border);
+    border-radius:26px;
+    padding:22px;
+    box-shadow:0 12px 32px rgba(15,23,42,.08);
+}
+.class-card{
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+}
+.class-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:16px;
+}
+.class-badge{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:8px 12px;
+    border-radius:999px;
+    background:#e0ecff;
+    color:var(--doc-primary);
+    font-size:.78rem;
+    font-weight:800;
+}
+.class-card h4{
+    margin:0;
+    font-size:1.18rem;
+}
+.class-card p{
+    margin:6px 0 0;
+    color:var(--doc-muted);
+    line-height:1.6;
+}
+.meta-grid{
+    display:grid;
+    grid-template-columns:repeat(2, minmax(0, 1fr));
+    gap:12px;
+}
+.meta-item{
+    padding:12px 14px;
+    border-radius:18px;
+    background:#f8fbff;
+    border:1px solid rgba(148,163,184,.16);
+}
+.meta-item span{
+    display:block;
+    color:var(--doc-muted);
+    font-size:.8rem;
+    font-weight:700;
+    margin-bottom:4px;
+}
+.meta-item strong{
+    font-size:1rem;
+}
+.class-actions{
+    display:flex;
+    gap:10px;
+    margin-top:auto;
+}
+.class-actions a{
+    flex:1;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    padding:12px 14px;
+    border-radius:16px;
+    font-weight:800;
+}
+.class-actions .solid{
+    background:var(--doc-primary);
+    color:#fff;
+}
+.class-actions .soft{
+    background:#e8f0ff;
+    color:var(--doc-primary);
+}
+.empty-card{
+    text-align:center;
+    padding:36px 24px;
+}
+.empty-card i{
+    font-size:2.4rem;
+    color:var(--doc-primary-2);
+    margin-bottom:14px;
+}
+.empty-card h4{
+    margin:0 0 10px;
+    font-size:1.3rem;
+}
+.empty-card p{
+    margin:0;
+    color:var(--doc-muted);
+    line-height:1.7;
+}
 .bottom-nav{
     position:fixed;
-    bottom:0;
-    left:0;
-    right:0;
-    height:75px;
-    background:white;
-    display:flex;
-    justify-content:space-around;
-    align-items:center;
-    box-shadow:0 -2px 10px rgba(0,0,0,0.08);
+    left:16px;
+    right:16px;
+    bottom:16px;
+    display:grid;
+    grid-template-columns:repeat(4, minmax(0, 1fr));
+    gap:10px;
+    padding:12px;
+    border-radius:24px;
+    background:rgba(255,255,255,.92);
+    border:1px solid rgba(148,163,184,.18);
+    box-shadow:0 14px 40px rgba(15,23,42,.12);
+    backdrop-filter:blur(10px);
+    z-index:20;
 }
-
 .bottom-nav a{
-    text-decoration:none;
-    color:#6b7280;
     display:flex;
     flex-direction:column;
     align-items:center;
-    gap:5px;
-    font-size:13px;
+    justify-content:center;
+    gap:6px;
+    min-height:58px;
+    border-radius:18px;
+    color:var(--doc-muted);
+    font-size:.8rem;
+    font-weight:700;
 }
-
-.bottom-nav a i{
-    font-size:22px;
-}
-
 .bottom-nav a.active{
-    color:#2563eb;
+    background:#e8f0ff;
+    color:var(--doc-primary);
 }
-
-/* RESPONSIVE */
-
-@media(min-width:900px){
-
-    .stats{
-        display:grid;
-        grid-template-columns:repeat(2,1fr);
+.loading{
+    text-align:center;
+    color:var(--doc-muted);
+    padding:28px 0;
+}
+@media (max-width: 1080px){
+    .stats{grid-template-columns:repeat(2, minmax(0, 1fr))}
+    .classes-grid{grid-template-columns:repeat(2, minmax(0, 1fr))}
+}
+@media (max-width: 760px){
+    .shell{width:min(100% - 24px, 1200px); padding-top:16px}
+    .topbar{padding:18px; border-radius:24px}
+    .toolbar{width:100%; justify-content:stretch}
+    .toolbar .ghost-btn,
+    .toolbar .primary-btn{flex:1}
+    .hero{padding:24px; border-radius:28px}
+    .stats{grid-template-columns:1fr}
+    .classes-grid{grid-template-columns:1fr}
+    .meta-grid{grid-template-columns:1fr}
+    .class-actions{flex-direction:column}
+    .bottom-nav{
+        left:10px;
+        right:10px;
+        bottom:10px;
+        gap:8px;
+        padding:10px;
     }
-
+    .bottom-nav a{min-height:54px; font-size:.75rem}
 }
-
 </style>
 </head>
-
 <body>
 
-<!-- TOPBAR -->
+<main class="shell">
+    <header class="topbar">
+        <div class="brand">
+            <div class="brand-badge">
+                <i class="fa-solid fa-graduation-cap"></i>
+            </div>
+            <div>
+                <h1>Panel docente</h1>
+                <p id="topbarSubtitle">Cargando información del docente...</p>
+            </div>
+        </div>
 
-<div class="topbar">
+        <div class="toolbar">
+            <a class="ghost-btn" href="clase.html">
+                <i class="fa-solid fa-book-open"></i>
+                Ver clases
+            </a>
+            <button class="primary-btn" type="button" onclick="logout()">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                Cerrar sesión
+            </button>
+        </div>
+    </header>
 
-    <div class="topbar-left">
+    <section class="hero">
+        <div class="hero-content">
+            <span class="eyebrow">
+                <i class="fa-solid fa-wave-square"></i>
+                Gestión académica en tiempo real
+            </span>
+            <h2 id="heroTitle">Bienvenido a tu centro de control docente</h2>
+            <p>
+                Revisa clases, estudiantes, tareas y materiales desde un panel pensado para trabajar bien en escritorio y en móvil.
+            </p>
+            <div class="hero-actions">
+                <a class="hero-link alt" href="crear-clase.html">
+                    <i class="fa-solid fa-plus"></i>
+                    Crear clase
+                </a>
+                <a class="hero-link" href="clase.html">
+                    <i class="fa-solid fa-layer-group"></i>
+                    Administrar módulos
+                </a>
+            </div>
+        </div>
+    </section>
 
-     <div class="circle-btn">
-    <i class="fa-solid fa-graduation-cap"></i>
-</div>
+    <section class="stats">
+        <article class="stat-card">
+            <div class="stat-top">
+                <span>Clases activas</span>
+                <div class="stat-icon clases"><i class="fa-solid fa-book"></i></div>
+            </div>
+            <h3 id="totalClases">0</h3>
+            <p>Materias disponibles para gestionar.</p>
+        </article>
+        <article class="stat-card">
+            <div class="stat-top">
+                <span>Estudiantes</span>
+                <div class="stat-icon estudiantes"><i class="fa-solid fa-users"></i></div>
+            </div>
+            <h3 id="totalEstudiantes">0</h3>
+            <p>Alumnos inscritos en tus clases.</p>
+        </article>
+        <article class="stat-card">
+            <div class="stat-top">
+                <span>Tareas</span>
+                <div class="stat-icon tareas"><i class="fa-solid fa-list-check"></i></div>
+            </div>
+            <h3 id="totalTareas">0</h3>
+            <p>Actividades creadas para seguimiento.</p>
+        </article>
+        <article class="stat-card">
+            <div class="stat-top">
+                <span>Materiales</span>
+                <div class="stat-icon materiales"><i class="fa-solid fa-folder-open"></i></div>
+            </div>
+            <h3 id="totalMateriales">0</h3>
+            <p>Recursos listos para compartir.</p>
+        </article>
+    </section>
 
+    <section class="section-head">
         <div>
-
-            <h2>
-                Dashboard docente
-            </h2>
-
-            <small style="opacity:0.8;">
-                Educational Control
-            </small>
-
+            <h3>Tus clases recientes</h3>
+            <p>Accede rápido a cada módulo de clase y continúa trabajando desde ahí.</p>
         </div>
+        <a href="clase.html">Ir al catálogo completo</a>
+    </section>
 
-    </div>
+    <section id="classesGrid" class="classes-grid">
+        <div class="loading">Cargando clases...</div>
+    </section>
+</main>
 
-    <div style="display:flex; align-items:center; gap:15px;">
-
-        <div class="top-icons">
-            <i class="fa-regular fa-bell"></i>
-        </div>
-
-        <button class="logout-btn" onclick="logout()">
-
-            <i class="fa-solid fa-right-from-bracket"></i>
-            Salir
-
-        </button>
-
-    </div>
-
-</div>
-
-<!-- HERO -->
-
-<div class="hero">
-
-    <div class="hero-content">
-
-        <h1>
-            Educational Control
-        </h1>
-
-        <p>
-            Gestiona clases, estudiantes y tareas fácilmente
-        </p>
-
-    </div>
-
-</div>
-
-<!-- CARDS -->
-
-<div class="stats">
-
-    <div class="stat-card">
-
-        <img src="https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?q=80&w=500&auto=format&fit=crop">
-
-        <div class="stat-info">
-
-            <div class="stat-title">
-                <span>📚</span>
-                <h3 id="totalMaterias">0</h3>
-            </div>
-
-            <p>
-                Gestiona tus asignaturas y organiza el contenido educativo.
-            </p>
-
-        </div>
-
-    </div>
-
-    <div class="stat-card">
-
-        <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=500&auto=format&fit=crop">
-
-        <div class="stat-info">
-
-            <div class="stat-title">
-                <span>👨‍🎓</span>
-                <h3 id="totalEstudiantes">0</h3>
-            </div>
-
-            <p>
-                Administra estudiantes y actividades pendientes.
-            </p>
-
-        </div>
-
-    </div>
-
-    <div class="stat-card">
-
-        <img src="https://images.unsplash.com/photo-1516321497487-e288fb19713f?q=80&w=500&auto=format&fit=crop">
-
-        <div class="stat-info">
-
-            <div class="stat-title">
-                <span>📝</span>
-                <h3 id="totalTareas">0</h3>
-            </div>
-
-            <p>
-                Revisa tareas activas y progreso académico.
-            </p>
-
-        </div>
-
-    </div>
-
-    <div class="stat-card">
-
-        <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=500&auto=format&fit=crop">
-
-        <div class="stat-info">
-
-            <div class="stat-title">
-                <span>📊</span>
-                <h3>Activo</h3>
-            </div>
-
-            <p>
-                Mantén seguimiento del rendimiento general.
-            </p>
-
-        </div>
-
-    </div>
-
-</div>
-
-<!-- NAVBAR -->
-
-<div class="bottom-nav">
-
-    <a href="#" class="active">
+<nav class="bottom-nav">
+    <a href="dashboard.html" class="active">
         <i class="fa-solid fa-house"></i>
         Inicio
     </a>
-
     <a href="clase.html">
         <i class="fa-solid fa-book"></i>
         Clases
     </a>
-
-    <a href="#">
-        <i class="fa-solid fa-users"></i>
-        Estudiantes
+    <a href="crear-clase.html">
+        <i class="fa-solid fa-plus"></i>
+        Crear
     </a>
-
-    <a href="#" onclick="logout()">
+    <a href="#" onclick="logout(); return false;">
         <i class="fa-regular fa-user"></i>
-        Perfil
+        Salir
     </a>
-
-</div>
-
+</nav>
 
 <script>
-
-function logout(){
-
-    fetch(
-    "/api/auth/logout",
-    {
-        credentials:"include"
-    })
-
-    .then(() => {
-
-        window.location.href =
-        "../login.html";
-
-    });
-
+function escapeHtml(value) {
+    return String(value || "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#39;");
 }
 
+async function cargarDashboard() {
+    try {
+        const response = await fetch("/api/docente/dashboard", {
+            credentials: "include",
+        });
+
+        if (response.status === 401 || response.status === 403) {
+            window.location.href = "/login.html";
+            return;
+        }
+
+        if (!response.ok) {
+            throw new Error("No fue posible cargar el dashboard");
+        }
+
+        const data = await response.json();
+        const usuario = data.usuario || {};
+        const resumen = data.resumen || {};
+        const clases = Array.isArray(data.clases) ? data.clases : [];
+
+        document.getElementById("topbarSubtitle").textContent =
+            "Hola, " + (usuario.nombre || "docente") + ". Este es el resumen de tu trabajo.";
+        document.getElementById("heroTitle").textContent =
+            "Bienvenido, " + (usuario.nombre || "docente") + ". Mantén tus clases bajo control.";
+
+        document.getElementById("totalClases").textContent = resumen.totalClases || 0;
+        document.getElementById("totalEstudiantes").textContent = resumen.totalEstudiantes || 0;
+        document.getElementById("totalTareas").textContent = resumen.totalTareas || 0;
+        document.getElementById("totalMateriales").textContent = resumen.totalMateriales || 0;
+
+        const grid = document.getElementById("classesGrid");
+        if (!clases.length) {
+            grid.innerHTML = `
+                <article class="empty-card">
+                    <i class="fa-solid fa-book-open-reader"></i>
+                    <h4>Aún no hay clases creadas</h4>
+                    <p>Empieza creando tu primera clase para publicar materiales, tareas y asistencia desde el panel.</p>
+                </article>
+            `;
+            return;
+        }
+
+        grid.innerHTML = clases.map((clase) => `
+            <article class="class-card">
+                <div class="class-head">
+                    <div>
+                        <span class="class-badge">
+                            <i class="fa-solid fa-key"></i>
+                            ${escapeHtml(clase.codigo_clase)}
+                        </span>
+                        <h4>${escapeHtml(clase.materia)}</h4>
+                        <p>Docente responsable: ${escapeHtml(clase.profesor || usuario.nombre || "N/D")}</p>
+                    </div>
+                    <i class="fa-solid fa-arrow-up-right-from-square" style="color:#2563eb"></i>
+                </div>
+
+                <div class="meta-grid">
+                    <div class="meta-item">
+                        <span>Grado y seccion</span>
+                        <strong>${escapeHtml(clase.grado || "N/D")} | ${escapeHtml(clase.seccion || "N/D")}</strong>
+                    </div>
+                    <div class="meta-item">
+                        <span>Estudiantes</span>
+                        <strong>${clase.estudiantes || 0}</strong>
+                    </div>
+                    <div class="meta-item">
+                        <span>Tareas</span>
+                        <strong>${clase.tareas || 0}</strong>
+                    </div>
+                    <div class="meta-item">
+                        <span>Materiales</span>
+                        <strong>${clase.materiales || 0}</strong>
+                    </div>
+                </div>
+
+                <div class="class-actions">
+                    <a class="solid" href="detalle-clase.html?id=${clase.id}">
+                        <i class="fa-solid fa-eye"></i>
+                        Abrir clase
+                    </a>
+                    <a class="soft" href="estudiantes-clase.html?id=${clase.id}">
+                        <i class="fa-solid fa-users"></i>
+                        Estudiantes
+                    </a>
+                </div>
+            </article>
+        `).join("");
+    } catch (error) {
+        document.getElementById("classesGrid").innerHTML = `
+            <article class="empty-card">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+                <h4>No se pudo cargar el dashboard</h4>
+                <p>Verifica la conexión con el servidor o vuelve a iniciar sesión.</p>
+            </article>
+        `;
+    }
+}
+
+function logout() {
+    fetch("/api/auth/logout", {
+        method: "POST",
+        credentials: "include",
+    }).finally(() => {
+        window.location.href = "/login.html";
+    });
+}
+
+cargarDashboard();
 </script>
 
 </body>

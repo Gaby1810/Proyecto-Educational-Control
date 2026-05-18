@@ -8,6 +8,66 @@ router.use(requireAuth, requireRole("docente", "admin"));
 
 function sanitize(str) { return String(str || "").trim().slice(0, 200); }
 
+router.get("/dashboard", (req, res) => {
+    const isAdmin = req.session.usuario.rol === "admin";
+    const docenteId = req.session.usuario.id;
+    const where = isAdmin ? "" : "WHERE dm.docente_id = ?";
+    const params = isAdmin ? [] : [docenteId];
+
+    const resumenSql = `
+        SELECT
+            COUNT(DISTINCT dm.id) AS totalClases,
+            COUNT(DISTINCT em.estudiante_id) AS totalEstudiantes,
+            COUNT(DISTINCT t.id) AS totalTareas,
+            COUNT(DISTINCT mt.id) AS totalMateriales
+        FROM docente_materias dm
+        LEFT JOIN estudiante_materias em ON em.docente_materia_id = dm.id
+        LEFT JOIN tareas t ON t.docente_materia_id = dm.id
+        LEFT JOIN materiales mt ON mt.docente_materia_id = dm.id
+        ${where}`;
+
+    const clasesSql = `
+        SELECT
+            dm.id,
+            m.nombre AS materia,
+            dm.grado,
+            dm.seccion,
+            dm.codigo_clase,
+            u.nombre AS profesor,
+            COUNT(DISTINCT em.id) AS estudiantes,
+            COUNT(DISTINCT t.id) AS tareas,
+            COUNT(DISTINCT mt.id) AS materiales
+        FROM docente_materias dm
+        INNER JOIN materias m ON m.id = dm.materia_id
+        INNER JOIN usuarios u ON u.id = dm.docente_id
+        LEFT JOIN estudiante_materias em ON em.docente_materia_id = dm.id
+        LEFT JOIN tareas t ON t.docente_materia_id = dm.id
+        LEFT JOIN materiales mt ON mt.docente_materia_id = dm.id
+        ${where}
+        GROUP BY dm.id, m.nombre, dm.grado, dm.seccion, dm.codigo_clase, u.nombre
+        ORDER BY dm.id DESC
+        LIMIT 6`;
+
+    db.query(resumenSql, params, (resumenErr, resumenRows) => {
+        if (resumenErr) return res.status(500).json({ message: "Error cargando dashboard" });
+
+        db.query(clasesSql, params, (clasesErr, clasesRows) => {
+            if (clasesErr) return res.status(500).json({ message: "Error cargando clases" });
+
+            res.json({
+                usuario: req.session.usuario,
+                resumen: resumenRows[0] || {
+                    totalClases: 0,
+                    totalEstudiantes: 0,
+                    totalTareas: 0,
+                    totalMateriales: 0,
+                },
+                clases: clasesRows,
+            });
+        });
+    });
+});
+
 router.get("/mis-clases", (req, res) => {
     const docenteId = req.session.usuario.id;
     const sql = `

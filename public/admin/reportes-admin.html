@@ -3,472 +3,537 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Reportes Admin</title>
-
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-
+<link rel="stylesheet" href="../css/theme.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
 <style>
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
+:root{
+    --report-primary:#122b79;
+    --report-secondary:#2563eb;
+    --report-success:#059669;
+    --report-warning:#f59e0b;
+    --report-bg:#f5f8ff;
+    --report-muted:#64748b;
+    --report-shadow:0 18px 48px rgba(15,23,42,.12);
 }
-
+*{box-sizing:border-box}
+button{width:auto}
 body{
-font-family:'Segoe UI',sans-serif;
-background:#f4f6fb;
-color:#111827;
+    margin:0;
+    min-height:100vh;
+    font-family:"Plus Jakarta Sans","Segoe UI",sans-serif;
+    background:
+        radial-gradient(circle at top left, rgba(37,99,235,.14), transparent 26%),
+        linear-gradient(180deg, #fcfdff 0%, var(--report-bg) 100%);
+    color:#0f172a;
 }
-
-/* ================= NAVBAR ================= */
-
-.navbar{
-height:70px;
-background:#1e3a8a;
-display:flex;
-align-items:center;
-justify-content:space-between;
-padding:0 30px;
-color:white;
+.shell{
+    width:min(1200px, calc(100% - 32px));
+    margin:0 auto;
+    padding:24px 0 110px;
 }
-
-.logo{
-display:flex;
-align-items:center;
-gap:10px;
-font-size:28px;
-font-weight:bold;
+.topbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:16px;
+    padding:18px 22px;
+    border-radius:28px;
+    background:rgba(18,43,121,.94);
+    color:#fff;
+    box-shadow:var(--report-shadow);
 }
-
-.logo i{
-font-size:22px;
+.brand{
+    display:flex;
+    align-items:center;
+    gap:16px;
 }
-
-.menu{
-display:flex;
-gap:40px;
+.brand-icon{
+    width:52px;
+    height:52px;
+    border-radius:18px;
+    display:grid;
+    place-items:center;
+    background:rgba(255,255,255,.14);
+    font-size:1.3rem;
 }
-
-.menu a{
-color:white;
-text-decoration:none;
-font-size:15px;
-font-weight:500;
+.brand h1{
+    margin:0;
+    font-size:clamp(1.2rem, 3vw, 1.65rem);
 }
-
-/* ================= CONTAINER ================= */
-
-.container{
-padding:30px;
+.brand p{
+    margin:4px 0 0;
+    color:rgba(255,255,255,.78);
+    font-size:.92rem;
 }
-
-.title{
-margin-bottom:30px;
+.toolbar{
+    display:flex;
+    gap:12px;
+    flex-wrap:wrap;
 }
-
-.title h1{
-font-size:50px;
-margin-bottom:8px;
+.toolbar a,
+.toolbar button{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    border:none;
+    border-radius:16px;
+    padding:13px 18px;
+    font:inherit;
+    font-weight:800;
+    cursor:pointer;
 }
-
-.title p{
-color:#6b7280;
-font-size:20px;
+.toolbar a{
+    background:rgba(255,255,255,.12);
+    color:#fff;
+    text-decoration:none;
 }
-
-/* ================= TOP CARDS ================= */
-
-.top-cards{
-display:grid;
-grid-template-columns:2fr 1fr 1fr;
-gap:25px;
-margin-bottom:30px;
+.toolbar button{
+    background:#fff;
+    color:var(--report-primary);
 }
-
+.hero{
+    margin-top:22px;
+    padding:30px;
+    border-radius:34px;
+    background:
+        linear-gradient(120deg, rgba(18,43,121,.96), rgba(37,99,235,.9)),
+        url("https://images.unsplash.com/photo-1516321497487-e288fb19713f?q=80&w=1600&auto=format&fit=crop") center/cover;
+    color:#fff;
+    box-shadow:var(--report-shadow);
+}
+.hero h2{
+    margin:0;
+    font-size:clamp(2rem, 5vw, 3rem);
+    line-height:1.05;
+}
+.hero p{
+    margin:14px 0 0;
+    max-width:720px;
+    color:rgba(255,255,255,.86);
+    line-height:1.7;
+}
+.stats{
+    margin-top:22px;
+    display:grid;
+    grid-template-columns:1.4fr 1fr 1fr;
+    gap:16px;
+}
 .card{
-background:white;
-border-radius:24px;
-padding:30px;
-box-shadow:0 4px 15px rgba(0,0,0,.05);
+    background:#fff;
+    border:1px solid rgba(148,163,184,.18);
+    border-radius:28px;
+    padding:24px;
+    box-shadow:0 14px 32px rgba(15,23,42,.08);
 }
-
 .main-card{
-display:flex;
-justify-content:space-between;
-align-items:center;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:18px;
 }
-
-.main-card h4{
-font-size:15px;
-color:#6b7280;
-margin-bottom:20px;
+.main-card small,
+.small-card small{
+    display:block;
+    color:var(--report-muted);
+    font-weight:800;
+    margin-bottom:10px;
+    letter-spacing:.02em;
 }
-
-.main-card h1{
-font-size:75px;
-color:#4f46e5;
-margin-bottom:10px;
+.main-card h3{
+    margin:0;
+    font-size:clamp(2.6rem, 6vw, 4.6rem);
+    color:var(--report-primary);
 }
-
 .main-card p{
-color:#ef4444;
-font-size:18px;
+    margin:10px 0 0;
+    color:var(--report-muted);
+    line-height:1.6;
 }
-
 .main-icon{
-font-size:70px;
-color:#6366f1;
+    width:88px;
+    height:88px;
+    border-radius:26px;
+    display:grid;
+    place-items:center;
+    color:#fff;
+    font-size:2rem;
+    background:linear-gradient(135deg,#2563eb,#7c3aed);
 }
-
 .small-card{
-display:flex;
-flex-direction:column;
-align-items:center;
-justify-content:center;
-text-align:center;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    gap:8px;
 }
-
-.small-card i{
-font-size:55px;
-margin-bottom:15px;
-color:#6366f1;
+.small-card .icon{
+    width:58px;
+    height:58px;
+    border-radius:18px;
+    display:grid;
+    place-items:center;
+    color:#fff;
+    font-size:1.4rem;
 }
-
-.small-card h2{
-font-size:55px;
-margin-bottom:10px;
+.small-card .icon.avg{background:linear-gradient(135deg,#f59e0b,#f97316)}
+.small-card .icon.students{background:linear-gradient(135deg,#059669,#10b981)}
+.small-card h3{
+    margin:0;
+    font-size:2.6rem;
 }
-
 .small-card p{
-font-size:18px;
-color:#6b7280;
+    margin:0;
+    color:var(--report-muted);
 }
-
-/* ================= BOTTOM ================= */
-
-.bottom{
-display:grid;
-grid-template-columns:1.4fr 1fr;
-gap:25px;
+.content{
+    margin-top:22px;
+    display:grid;
+    grid-template-columns:minmax(0, 1.3fr) minmax(0, .9fr);
+    gap:20px;
 }
-
-.chart-box{
-background:white;
-padding:25px;
-border-radius:24px;
-box-shadow:0 4px 15px rgba(0,0,0,.05);
+.panel{
+    background:#fff;
+    border:1px solid rgba(148,163,184,.18);
+    border-radius:28px;
+    padding:22px;
+    box-shadow:0 14px 32px rgba(15,23,42,.08);
 }
-
-.chart-box h2{
-margin-bottom:25px;
-font-size:32px;
+.panel-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    gap:16px;
+    flex-wrap:wrap;
+    margin-bottom:18px;
 }
-
-.grades{
-background:white;
-padding:25px;
-border-radius:24px;
-box-shadow:0 4px 15px rgba(0,0,0,.05);
+.panel-head h3{
+    margin:0;
+    font-size:1.3rem;
 }
-
-.grades-top{
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:20px;
+.panel-head p{
+    margin:6px 0 0;
+    color:var(--report-muted);
 }
-
-.grades-top h2{
-font-size:32px;
+.grade-list{
+    display:flex;
+    flex-direction:column;
+    gap:14px;
 }
-
-.grades-top a{
-text-decoration:none;
-color:#4f46e5;
-font-weight:600;
-}
-
 .grade-item{
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:18px;
-border:1px solid #eee;
-border-radius:18px;
-margin-bottom:15px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:16px;
+    padding:16px;
+    border-radius:22px;
+    background:#f8fbff;
+    border:1px solid rgba(148,163,184,.14);
 }
-
 .grade-left{
-display:flex;
-align-items:center;
-gap:15px;
+    display:flex;
+    align-items:center;
+    gap:14px;
 }
-
 .dot{
-width:16px;
-height:16px;
-border-radius:50%;
+    width:16px;
+    height:16px;
+    border-radius:999px;
 }
-
-.grade-info h3{
-font-size:25px;
-margin-bottom:5px;
+.grade-item h4{
+    margin:0;
 }
-
-.grade-info p{
-font-size:15px;
-color:#6b7280;
+.grade-item p{
+    margin:6px 0 0;
+    color:var(--report-muted);
 }
-
 .badge{
-padding:10px 18px;
-background:#eef2ff;
-color:#4f46e5;
-border-radius:20px;
-font-weight:600;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    padding:10px 14px;
+    border-radius:999px;
+    background:#e8f0ff;
+    color:var(--report-primary);
+    font-weight:800;
+    white-space:nowrap;
 }
-
-/* ================= RESPONSIVE ================= */
-
-@media(max-width:1200px){
-
-.top-cards{
-grid-template-columns:1fr;
+.empty{
+    text-align:center;
+    color:var(--report-muted);
+    padding:24px 12px;
 }
-
-.bottom{
-grid-template-columns:1fr;
+.bottom-nav{
+    position:fixed;
+    left:16px;
+    right:16px;
+    bottom:16px;
+    display:grid;
+    grid-template-columns:repeat(4, minmax(0, 1fr));
+    gap:10px;
+    padding:12px;
+    border-radius:24px;
+    background:rgba(255,255,255,.92);
+    border:1px solid rgba(148,163,184,.18);
+    box-shadow:0 14px 40px rgba(15,23,42,.12);
+    backdrop-filter:blur(10px);
 }
-
+.bottom-nav a{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+    min-height:58px;
+    border-radius:18px;
+    color:var(--report-muted);
+    font-size:.8rem;
+    font-weight:800;
+    text-decoration:none;
 }
-
+.bottom-nav a.active{
+    background:#e8f0ff;
+    color:var(--report-primary);
+}
+@media (max-width: 1080px){
+    .stats{grid-template-columns:1fr}
+    .content{grid-template-columns:1fr}
+}
+@media (max-width: 760px){
+    .shell{width:min(100% - 24px, 1200px); padding-top:16px}
+    .topbar{padding:18px; border-radius:24px}
+    .toolbar{width:100%}
+    .toolbar a,
+    .toolbar button{flex:1}
+    .hero{padding:24px}
+    .main-card,
+    .grade-item{flex-direction:column; align-items:flex-start}
+    .bottom-nav{
+        left:10px;
+        right:10px;
+        bottom:10px;
+        gap:8px;
+        padding:10px;
+    }
+    .bottom-nav a{min-height:54px; font-size:.75rem}
+}
 </style>
 </head>
-
 <body>
 
-<!-- NAVBAR -->
-<div class="navbar">
+<main class="shell">
+    <header class="topbar">
+        <div class="brand">
+            <div class="brand-icon">
+                <i class="fa-solid fa-chart-line"></i>
+            </div>
+            <div>
+                <h1>Reportes institucionales</h1>
+                <p id="reportSubtitle">Análisis general del rendimiento y matrícula.</p>
+            </div>
+        </div>
 
-<div class="logo">
-<i class="fa-solid fa-graduation-cap"></i>
-Educational Control
-</div>
+        <div class="toolbar">
+            <a href="dashboard-admin.html">
+                <i class="fa-solid fa-house"></i>
+                Dashboard
+            </a>
+            <button type="button" onclick="logout()">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                Cerrar sesión
+            </button>
+        </div>
+    </header>
 
-<div class="menu">
-<a href="#">Inicio</a>
-<a href="#">Reportes</a>
-<a href="#">Administrador</a>
-</div>
+    <section class="hero">
+        <h2>Reportes listos para consulta rápida desde móvil o escritorio.</h2>
+        <p>
+            Visualiza asistencia, promedio general y distribución de estudiantes por año de bachillerato con un diseño más ligero y adaptable.
+        </p>
+    </section>
 
-</div>
+    <section class="stats">
+        <article class="card main-card">
+            <div>
+                <small>ASISTENCIA GENERAL</small>
+                <h3 id="asistencia">0%</h3>
+                <p>Porcentaje estimado de asistencia calculado a partir de los registros actuales.</p>
+            </div>
+            <div class="main-icon">
+                <i class="fa-regular fa-calendar-check"></i>
+            </div>
+        </article>
 
-<!-- CONTENT -->
-<div class="container">
+        <article class="card small-card">
+            <div class="icon avg">
+                <i class="fa-solid fa-graduation-cap"></i>
+            </div>
+            <small>PROMEDIO DEL SISTEMA</small>
+            <h3 id="promedio">0</h3>
+            <p>Promedio de calificaciones registradas.</p>
+        </article>
 
-<div class="title">
-<h1>Reportes</h1>
-<p>Resumen institucional del sistema</p>
-</div>
+        <article class="card small-card">
+            <div class="icon students">
+                <i class="fa-solid fa-users"></i>
+            </div>
+            <small>TOTAL DE ALUMNOS</small>
+            <h3 id="alumnos">0</h3>
+            <p>Estudiantes activos en la plataforma.</p>
+        </article>
+    </section>
 
-<!-- TOP -->
-<div class="top-cards">
+    <section class="content">
+        <article class="panel">
+            <div class="panel-head">
+                <div>
+                    <h3>Estudiantes por año</h3>
+                    <p>Distribución de matrícula por ciclo de bachillerato.</p>
+                </div>
+            </div>
+            <canvas id="chart"></canvas>
+        </article>
 
-<!-- MAIN -->
-<div class="card main-card">
+        <article class="panel">
+            <div class="panel-head">
+                <div>
+                    <h3>Resumen por año</h3>
+                    <p>Clases y estudiantes agrupados por nivel.</p>
+                </div>
+            </div>
+            <div id="listaGrados" class="grade-list">
+                <div class="empty">Cargando resumen...</div>
+            </div>
+        </article>
+    </section>
+</main>
 
-<div>
-
-<h4>RENDIMIENTO INSTITUCIONAL</h4>
-
-<h1 id="asistencia">0%</h1>
-
-<p>+2.4% este mes</p>
-
-</div>
-
-<div class="main-icon">
-<i class="fa-regular fa-calendar-check"></i>
-</div>
-
-</div>
-
-<!-- PROMEDIO -->
-<div class="card small-card">
-
-<i class="fa-solid fa-graduation-cap"></i>
-
-<h2 id="promedio">0</h2>
-
-<p>Promedio Sistema</p>
-
-</div>
-
-<!-- ALUMNOS -->
-<div class="card small-card">
-
-<i class="fa-solid fa-users"></i>
-
-<h2 id="alumnos">0</h2>
-
-<p>Total Alumnos</p>
-
-</div>
-
-</div>
-
-<!-- BOTTOM -->
-<div class="bottom">
-
-<!-- CHART -->
-<div class="chart-box">
-
-<h2>Estudiantes por año</h2>
-
-<canvas id="chart"></canvas>
-
-</div>
-
-<!-- GRADOS -->
-<div class="grades">
-
-<div class="grades-top">
-
-<h2>Años Bachillerato</h2>
-
-<a href="#">
-Ver todas
-</a>
-
-</div>
-
-<div id="listaGrados"></div>
-
-</div>
-
-</div>
-
-</div>
+<nav class="bottom-nav">
+    <a href="dashboard-admin.html">
+        <i class="fa-solid fa-house"></i>
+        Inicio
+    </a>
+    <a href="clases-admin.html">
+        <i class="fa-solid fa-book"></i>
+        Clases
+    </a>
+    <a href="reportes-admin.html" class="active">
+        <i class="fa-solid fa-chart-column"></i>
+        Reportes
+    </a>
+    <a href="#" onclick="logout(); return false;">
+        <i class="fa-regular fa-user"></i>
+        Salir
+    </a>
+</nav>
 
 <script>
+let reportChart = null;
 
-// ================= FETCH REPORTES =================
+function apiJson(url) {
+    return fetch(url, {
+        credentials: "include",
+    }).then(async (response) => {
+        if (response.status === 401 || response.status === 403) {
+            window.location.href = "/login.html";
+            throw new Error("Sesión no válida");
+        }
 
-fetch("/api/admin/reportes",{
-credentials:"include"
-})
-.then(r=>r.json())
-.then(data=>{
-
-// ================= KPIS =================
-
-document.getElementById("asistencia")
-.innerText=data.asistencia+"%";
-
-document.getElementById("promedio")
-.innerText=data.promedio;
-
-document.getElementById("alumnos")
-.innerText=data.alumnos;
-
-// ================= CHART =================
-
-new Chart(document.getElementById("chart"),{
-
-type:"bar",
-
-data:{
-
-labels:data.graficos.map(g=>g.grado),
-
-datasets:[{
-
-data:data.graficos.map(g=>g.total),
-
-backgroundColor:[
-"#4f46e5",
-"#6366f1",
-"#8b5cf6"
-],
-
-borderRadius:10
-
-}]
-
-},
-
-options:{
-
-responsive:true,
-
-plugins:{
-legend:{
-display:false
-}
-},
-
-scales:{
-y:{
-beginAtZero:true
-}
+        const data = await response.json().catch(() => ({}));
+        if (!response.ok) {
+            throw new Error(data.message || "Error cargando reportes");
+        }
+        return data;
+    });
 }
 
+function renderGrafico(graficos) {
+    const canvas = document.getElementById("chart");
+    if (reportChart) {
+        reportChart.destroy();
+    }
+
+    reportChart = new Chart(canvas, {
+        type: "bar",
+        data: {
+            labels: graficos.map((item) => item.grado),
+            datasets: [{
+                data: graficos.map((item) => item.total),
+                backgroundColor: ["#2563eb", "#7c3aed", "#10b981"],
+                borderRadius: 12,
+            }],
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false,
+                },
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        precision: 0,
+                    },
+                },
+            },
+        },
+    });
 }
 
-});
+function renderLista(graficos) {
+    const colores = ["#2563eb", "#7c3aed", "#10b981"];
+    const list = document.getElementById("listaGrados");
 
-// ================= LISTA =================
+    if (!Array.isArray(graficos) || !graficos.length) {
+        list.innerHTML = '<div class="empty">Aún no hay datos por año para mostrar.</div>';
+        return;
+    }
 
-let colores=[
-"#4f46e5",
-"#ef4444",
-"#10b981"
-];
+    list.innerHTML = graficos.map((item, index) => `
+        <article class="grade-item">
+            <div class="grade-left">
+                <div class="dot" style="background:${colores[index % colores.length]}"></div>
+                <div>
+                    <h4>${item.grado}</h4>
+                    <p>${item.total} estudiantes registrados.</p>
+                </div>
+            </div>
+            <div class="badge">${item.clases} clases</div>
+        </article>
+    `).join("");
+}
 
-let box=document.getElementById("listaGrados");
+async function cargarReportes() {
+    try {
+        const data = await apiJson("/api/admin/reportes");
+        document.getElementById("asistencia").textContent = (data.asistencia || 0) + "%";
+        document.getElementById("promedio").textContent = data.promedio || 0;
+        document.getElementById("alumnos").textContent = data.alumnos || 0;
+        document.getElementById("reportSubtitle").textContent =
+            "Resumen académico de " + (data.alumnos || 0) + " estudiantes registrados.";
+        renderGrafico(Array.isArray(data.graficos) ? data.graficos : []);
+        renderLista(Array.isArray(data.graficos) ? data.graficos : []);
+    } catch (error) {
+        document.getElementById("listaGrados").innerHTML =
+            '<div class="empty">No fue posible cargar los reportes en este momento.</div>';
+    }
+}
 
-data.graficos.forEach((g,index)=>{
+function logout() {
+    fetch("/api/auth/logout", {
+        method: "POST",
+        credentials: "include",
+    }).finally(() => {
+        window.location.href = "/login.html";
+    });
+}
 
-box.innerHTML+=`
-
-<div class="grade-item">
-
-<div class="grade-left">
-
-<div
-class="dot"
-style="background:${colores[index]}">
-</div>
-
-<div class="grade-info">
-
-<h3>${g.grado}</h3>
-
-<p>
-${g.total} estudiantes
-</p>
-
-</div>
-
-</div>
-
-<div class="badge">
-${g.clases} clases
-</div>
-
-</div>
-
-`;
-
-});
-
-});
-
+cargarReportes();
 </script>
 
 </body>

@@ -21,6 +21,17 @@ for (const key of required) {
 
 const isProd = process.env.NODE_ENV === "production";
 const forceHttps = process.env.FORCE_HTTPS === "true";
+const trustProxy = Number(process.env.TRUST_PROXY || 1);
+const sameSite = (process.env.SESSION_COOKIE_SAMESITE || "lax").toLowerCase();
+
+function resolveSessionCookieSecure(value) {
+    const normalized = String(value || "auto").toLowerCase();
+    if (normalized === "true") return true;
+    if (normalized === "false") return false;
+    return "auto";
+}
+
+const sessionCookieSecure = resolveSessionCookieSecure(process.env.SESSION_COOKIE_SECURE);
 
 // Seguridad - headers HTTP
 app.use(helmet({
@@ -46,7 +57,7 @@ app.use(cors({
 // Parsers
 app.use(express.json({ limit: "2mb" }));
 app.use(express.urlencoded({ extended: true, limit: "2mb" }));
-app.set("trust proxy", 1);
+app.set("trust proxy", trustProxy);
 
 if (forceHttps) {
     app.use((req, res, next) => {
@@ -81,11 +92,12 @@ app.use(session({
     resave: false,
     saveUninitialized: false,
     name: "edu.sid",
+    proxy: isProd,
     cookie: {
         maxAge: 1000 * 60 * 60 * 4,
         httpOnly: true,
-        secure: isProd,
-        sameSite: "lax",
+        secure: sessionCookieSecure,
+        sameSite,
     },
 }));
 
@@ -120,8 +132,10 @@ app.use((err, req, res, next) => {
 
 app.use((req, res) => res.status(404).json({ message: "Recurso no encontrado" }));
 
-const PORT = process.env.PORT || 3000;
+const PORT = Number(process.env.PORT) || 3001;
 app.listen(PORT, () => {
     console.log("Servidor Educational Control en http://localhost:" + PORT);
     console.log("Entorno:", process.env.NODE_ENV || "development");
+    console.log("Trust proxy:", trustProxy);
+    console.log("Session cookie secure:", sessionCookieSecure);
 });
