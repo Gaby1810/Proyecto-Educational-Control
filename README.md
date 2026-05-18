@@ -89,11 +89,16 @@ Abrir el navegador en http://localhost:3000
 
 Ver `.env.example` para la lista completa.
 
+## Base de datos
+
+El diagrama ER y las instrucciones para revisar la base desde AWS están en `docs/database-diagram.md`.
+
 ## Seguridad
 
 - Contrasenas con bcrypt (12 rounds)
 - Sesiones con cookie HttpOnly + SameSite
 - Rate limiting en login y API
+- Bloqueo temporal de acceso durante 15 minutos tras 3 intentos fallidos
 - Helmet para headers HTTP
 - Validacion de inputs y sanitizacion
 - Prepared statements en todas las queries SQL

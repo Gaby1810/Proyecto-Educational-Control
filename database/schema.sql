@@ -30,6 +30,17 @@ CREATE TABLE usuarios (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- =========================================
+-- LOGIN_INTENTOS (bloqueo temporal por intentos fallidos)
+-- =========================================
+CREATE TABLE login_intentos (
+    correo              VARCHAR(150) PRIMARY KEY,
+    intentos_fallidos   INT NOT NULL DEFAULT 0,
+    bloqueado_hasta     DATETIME NULL,
+    ultimo_intento      TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX idx_bloqueado_hasta (bloqueado_hasta)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- =========================================
 -- MATERIAS
 -- =========================================
 CREATE TABLE materias (

@@ -5,6 +5,8 @@ const db      = require("../db");
 const { requireAuth } = require("../middlewares/auth");
 
 const BCRYPT_ROUNDS = 12;
+const MAX_LOGIN_ATTEMPTS = Number(process.env.AUTH_MAX_LOGIN_ATTEMPTS || 3);
+const LOGIN_LOCK_MINUTES = Number(process.env.AUTH_LOCKOUT_MINUTES || 15);
 
 const regexCorreo   = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const regexDUI      = /^\d{8}-\d$/;
@@ -13,6 +15,51 @@ const regexPassword = /^(?=.*[A-Za-z])(?=.*\d).{8,}$/;
 
 function sanitize(str) {
     return String(str || "").trim().slice(0, 255);
+}
+
+function query(sql, params = []) {
+    return new Promise((resolve, reject) => {
+        db.query(sql, params, (err, result) => {
+            if (err) return reject(err);
+            resolve(result);
+        });
+    });
+}
+
+async function obtenerIntentoLogin(correo) {
+    const result = await query(
+        "SELECT correo, intentos_fallidos, bloqueado_hasta FROM login_intentos WHERE correo=?",
+        [correo]
+    );
+    return result[0] || null;
+}
+
+async function limpiarIntentosLogin(correo) {
+    await query("DELETE FROM login_intentos WHERE correo=?", [correo]);
+}
+
+async function registrarIntentoFallido(correo) {
+    const actual = await obtenerIntentoLogin(correo);
+    const intentosFallidos = (actual?.intentos_fallidos || 0) + 1;
+    const bloqueado = intentosFallidos >= MAX_LOGIN_ATTEMPTS;
+    const bloqueadoHasta = bloqueado
+        ? new Date(Date.now() + (LOGIN_LOCK_MINUTES * 60 * 1000))
+        : null;
+
+    await query(
+        `INSERT INTO login_intentos (correo, intentos_fallidos, bloqueado_hasta)
+         VALUES (?,?,?)
+         ON DUPLICATE KEY UPDATE
+            intentos_fallidos = VALUES(intentos_fallidos),
+            bloqueado_hasta   = VALUES(bloqueado_hasta),
+            ultimo_intento    = CURRENT_TIMESTAMP`,
+        [correo, intentosFallidos, bloqueadoHasta]
+    );
+
+    return {
+        bloqueado,
+        intentosRestantes: Math.max(MAX_LOGIN_ATTEMPTS - intentosFallidos, 0),
+    };
 }
 
 // REGISTER (solo estudiantes y docentes)
@@ -49,7 +96,7 @@ router.post("/register", async (req, res) => {
             if (tipo_bachillerato && !["Tecnico", "General"].includes(tipo_bachillerato))
                 return res.status(400).json({ message: "Tipo de bachillerato invalido" });
             if (anio && !["1", "2", "3"].includes(String(anio)))
-                return res.status(400).json({ message: "Anio invalido" });
+                return res.status(400).json({ message: "Año inválido" });
         }
 
         db.query("SELECT id FROM usuarios WHERE correo=?", [correo], async (err, result) => {
@@ -117,18 +164,52 @@ router.post("/register-admin", async (req, res) => {
 });
 
 // LOGIN
-router.post("/login", (req, res) => {
+router.post("/login", async (req, res) => {
     const correo   = sanitize(req.body.correo).toLowerCase();
     const password = String(req.body.password || "");
     if (!regexCorreo.test(correo) || !password)
         return res.status(400).json({ message: "Credenciales invalidas" });
 
-    db.query("SELECT * FROM usuarios WHERE correo=?", [correo], async (err, result) => {
-        if (err) return res.status(500).json({ message: "Error servidor" });
-        if (result.length === 0) return res.status(401).json({ message: "Credenciales incorrectas" });
+    try {
+        const intentoActual = await obtenerIntentoLogin(correo);
+        if (intentoActual?.bloqueado_hasta) {
+            const bloqueadoHasta = new Date(intentoActual.bloqueado_hasta);
+            if (bloqueadoHasta > new Date()) {
+                return res.status(429).json({
+                    message: `Demasiados intentos fallidos. Tu acceso está bloqueado durante ${LOGIN_LOCK_MINUTES} minutos.`,
+                });
+            }
+            await limpiarIntentosLogin(correo);
+        }
+
+        const result = await query("SELECT * FROM usuarios WHERE correo=?", [correo]);
+        if (result.length === 0) {
+            const intento = await registrarIntentoFallido(correo);
+            if (intento.bloqueado) {
+                return res.status(429).json({
+                    message: `Demasiados intentos fallidos. Tu acceso está bloqueado durante ${LOGIN_LOCK_MINUTES} minutos.`,
+                });
+            }
+            return res.status(401).json({
+                message: `Credenciales incorrectas. Intentos restantes antes del bloqueo: ${intento.intentosRestantes}.`,
+            });
+        }
+
         const user = result[0];
         const ok = await bcrypt.compare(password, user.password);
-        if (!ok) return res.status(401).json({ message: "Credenciales incorrectas" });
+        if (!ok) {
+            const intento = await registrarIntentoFallido(correo);
+            if (intento.bloqueado) {
+                return res.status(429).json({
+                    message: `Demasiados intentos fallidos. Tu acceso está bloqueado durante ${LOGIN_LOCK_MINUTES} minutos.`,
+                });
+            }
+            return res.status(401).json({
+                message: `Credenciales incorrectas. Intentos restantes antes del bloqueo: ${intento.intentosRestantes}.`,
+            });
+        }
+
+        await limpiarIntentosLogin(correo);
 
         req.session.regenerate((err) => {
             if (err) return res.status(500).json({ message: "Error de sesion" });
@@ -139,7 +220,9 @@ router.post("/login", (req, res) => {
                 res.json({ message: "Login correcto", rol: user.rol, nombre: user.nombre });
             });
         });
-    });
+    } catch (e) {
+        res.status(500).json({ message: "Error servidor" });
+    }
 });
 
 router.post("/logout", (req, res) => {
