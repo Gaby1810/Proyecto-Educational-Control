@@ -125,9 +125,9 @@ router.get("/reportes", (req, res) => {
         const gradosSql = `
             SELECT
                 CASE anio
-                    WHEN '1' THEN '1 Ano Bachillerato'
-                    WHEN '2' THEN '2 Ano Bachillerato'
-                    WHEN '3' THEN '3 Ano Bachillerato'
+                    WHEN '1' THEN '1 Año de Bachillerato'
+                    WHEN '2' THEN '2 Año de Bachillerato'
+                    WHEN '3' THEN '3 Año de Bachillerato'
                 END AS grado,
                 COUNT(*) AS total,
                 (SELECT COUNT(*) FROM docente_materias dm WHERE dm.grado=u.anio) AS clases
