@@ -2,9 +2,19 @@ const express = require("express");
 const bcrypt  = require("bcryptjs");
 const db      = require("../db");
 const { requireRole } = require("../middlewares/auth");
+const { seedDemoData } = require("../database/demo-data");
 
 const router = express.Router();
 const BCRYPT_ROUNDS = 12;
+
+function query(sql, params = []) {
+    return new Promise((resolve, reject) => {
+        db.query(sql, params, (err, result) => {
+            if (err) return reject(err);
+            resolve(result);
+        });
+    });
+}
 
 router.use(requireRole("admin"));
 
@@ -51,7 +61,7 @@ router.post("/usuarios", async (req, res) => {
         const { nombre, correo, password, rol, dui, telefono } = req.body;
         if (!nombre || !correo || !password || !rol)
             return res.status(400).json({ message: "Faltan campos requeridos" });
-        if (!["estudiante", "docente", "admin"].includes(rol))
+        if (!["estudiante", "docente"].includes(rol))
             return res.status(400).json({ message: "Rol invalido" });
         if (String(password).length < 8)
             return res.status(400).json({ message: "La contrasena debe tener minimo 8 caracteres" });
@@ -77,9 +87,20 @@ router.put("/usuarios/:id", async (req, res) => {
     const id = parseInt(req.params.id);
     if (isNaN(id)) return res.status(400).json({ message: "ID invalido" });
     const { nombre, correo, rol, password } = req.body;
-    if (!["estudiante", "docente", "admin"].includes(rol))
-        return res.status(400).json({ message: "Rol invalido" });
+
     try {
+        const usuarios = await query("SELECT id, rol FROM usuarios WHERE id=?", [id]);
+        if (usuarios.length === 0) return res.status(404).json({ message: "Usuario no encontrado" });
+
+        const actual = usuarios[0];
+        const rolesPermitidos = ["estudiante", "docente", "admin"];
+        if (!rolesPermitidos.includes(rol))
+            return res.status(400).json({ message: "Rol invalido" });
+        if (actual.rol !== "admin" && rol === "admin")
+            return res.status(403).json({ message: "Usa el flujo protegido para crear administradores" });
+        if (actual.rol === "admin" && rol !== "admin")
+            return res.status(403).json({ message: "No se puede degradar un admin desde este panel" });
+
         if (password && String(password).length >= 8) {
             const hash = await bcrypt.hash(String(password), BCRYPT_ROUNDS);
             db.query("UPDATE usuarios SET nombre=?, correo=?, rol=?, password=? WHERE id=?",
@@ -106,9 +127,17 @@ router.delete("/usuarios/:id", (req, res) => {
     if (isNaN(id)) return res.status(400).json({ message: "ID invalido" });
     if (id === req.session.usuario.id)
         return res.status(400).json({ message: "No puedes eliminar tu propia cuenta" });
-    db.query("DELETE FROM usuarios WHERE id=?", [id], (err) => {
-        if (err) return res.status(500).json({ message: "Error" });
-        res.json({ message: "Usuario eliminado" });
+
+    db.query("SELECT rol FROM usuarios WHERE id=?", [id], (lookupErr, rows) => {
+        if (lookupErr) return res.status(500).json({ message: "Error" });
+        if (rows.length === 0) return res.status(404).json({ message: "Usuario no encontrado" });
+        if (rows[0].rol === "admin")
+            return res.status(403).json({ message: "Los administradores no se eliminan desde este panel" });
+
+        db.query("DELETE FROM usuarios WHERE id=?", [id], (err) => {
+            if (err) return res.status(500).json({ message: "Error" });
+            res.json({ message: "Usuario eliminado" });
+        });
     });
 });
 
@@ -160,6 +189,18 @@ router.get("/clases", (req, res) => {
         if (err) return res.status(500).json({ message: "Error" });
         res.json(result);
     });
+});
+
+router.post("/demo-data", async (req, res) => {
+    try {
+        const demo = await seedDemoData();
+        res.json({
+            message: "Datos demo listos para probar el sistema",
+            ...demo,
+        });
+    } catch (error) {
+        res.status(500).json({ message: "No se pudieron crear los datos demo" });
+    }
 });
 
 module.exports = router;

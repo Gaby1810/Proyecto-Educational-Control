@@ -6,7 +6,7 @@
  * Modifica los valores ADMIN_NOMBRE, ADMIN_CORREO, ADMIN_PASSWORD aquí mismo.
  */
 require("dotenv").config();
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const mysql  = require("mysql2/promise");
 
 const ADMIN_NOMBRE   = "Administrador Demo";

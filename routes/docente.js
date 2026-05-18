@@ -8,6 +8,18 @@ router.use(requireAuth, requireRole("docente", "admin"));
 
 function sanitize(str) { return String(str || "").trim().slice(0, 200); }
 
+router.get("/perfil", (req, res) => {
+    const docenteId = req.session.usuario.id;
+    db.query(
+        "SELECT id, nombre, correo, rol, telefono, dui FROM usuarios WHERE id=?",
+        [docenteId],
+        (err, result) => {
+            if (err) return res.status(500).json({ message: "Error servidor" });
+            res.json(result[0] || {});
+        }
+    );
+});
+
 router.get("/dashboard", (req, res) => {
     const isAdmin = req.session.usuario.rol === "admin";
     const docenteId = req.session.usuario.id;
@@ -78,6 +90,29 @@ router.get("/mis-clases", (req, res) => {
         INNER JOIN usuarios  u ON dm.docente_id = u.id
         WHERE dm.docente_id = ?
         ORDER BY dm.id DESC`;
+    db.query(sql, [docenteId], (err, result) => {
+        if (err) return res.status(500).json({ message: "Error servidor" });
+        res.json(result);
+    });
+});
+
+router.get("/estudiantes", (req, res) => {
+    const docenteId = req.session.usuario.id;
+    const sql = `
+        SELECT
+            u.id,
+            u.nombre,
+            u.correo,
+            COUNT(DISTINCT dm.id) AS clases,
+            GROUP_CONCAT(DISTINCT m.nombre ORDER BY m.nombre SEPARATOR ', ') AS materias
+        FROM docente_materias dm
+        INNER JOIN estudiante_materias em ON em.docente_materia_id = dm.id
+        INNER JOIN usuarios u ON u.id = em.estudiante_id
+        INNER JOIN materias m ON m.id = dm.materia_id
+        WHERE dm.docente_id = ?
+        GROUP BY u.id, u.nombre, u.correo
+        ORDER BY u.nombre ASC`;
+
     db.query(sql, [docenteId], (err, result) => {
         if (err) return res.status(500).json({ message: "Error servidor" });
         res.json(result);

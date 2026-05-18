@@ -484,6 +484,10 @@ body{
         </div>
 
         <div class="toolbar">
+            <button type="button" onclick="cargarDemo()">
+                <i class="fa-solid fa-flask"></i>
+                Cargar demo
+            </button>
             <a href="reportes-admin.html">
                 <i class="fa-solid fa-chart-column"></i>
                 Reportes
@@ -788,11 +792,18 @@ function refrescarListaUsuarios() {
 function abrirEditar(id) {
     const usuario = usuariosGlobal.find((item) => item.id === id);
     if (!usuario) return;
+    const roleSelect = document.getElementById("editRol");
 
     document.getElementById("editId").value = usuario.id;
     document.getElementById("editNombre").value = usuario.nombre || "";
     document.getElementById("editCorreo").value = usuario.correo || "";
-    document.getElementById("editRol").value = usuario.rol || "estudiante";
+    roleSelect.innerHTML = usuario.rol === "admin"
+        ? '<option value="admin">Admin</option>'
+        : `
+            <option value="docente">Docente</option>
+            <option value="estudiante">Estudiante</option>
+        `;
+    roleSelect.value = usuario.rol || "estudiante";
     document.getElementById("editPassword").value = "";
     document.getElementById("editModal").classList.add("open");
 }
@@ -841,6 +852,24 @@ async function eliminarUsuario(id) {
         await cargarUsuarios();
     } catch (error) {
         alert(error.message || "No fue posible eliminar el usuario");
+    }
+}
+
+async function cargarDemo() {
+    if (!confirm("Esto creará o actualizará docentes, estudiantes, clases y códigos demo. ¿Continuar?")) {
+        return;
+    }
+
+    try {
+        const data = await apiJson("/api/admin/demo-data", {
+            method: "POST",
+        });
+        const codigos = Array.isArray(data.codigosClase) ? data.codigosClase.join(", ") : "No disponibles";
+        const docente = data.docente ? `${data.docente.correo} / ${data.docente.password}` : "No disponible";
+        alert(`${data.message}\nDocente demo: ${docente}\nCódigos: ${codigos}`);
+        await Promise.all([cargarDashboard(), cargarUsuarios()]);
+    } catch (error) {
+        alert(error.message || "No se pudieron crear los datos demo");
     }
 }
 

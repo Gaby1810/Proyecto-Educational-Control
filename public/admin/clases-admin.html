@@ -152,6 +152,52 @@ font-weight:600;
 cursor:pointer;
 }
 
+@media(max-width:900px){
+
+.header{
+height:auto;
+padding:16px 18px;
+flex-direction:column;
+align-items:flex-start;
+gap:12px;
+}
+
+.menu{
+gap:16px;
+flex-wrap:wrap;
+}
+
+.top{
+flex-direction:column;
+align-items:flex-start;
+gap:10px;
+}
+
+.info-grid{
+grid-template-columns:repeat(2,1fr);
+}
+
+}
+
+@media(max-width:560px){
+
+.container{
+padding:18px;
+}
+
+.class-header,
+.bottom-card{
+flex-direction:column;
+align-items:flex-start;
+gap:12px;
+}
+
+.info-grid{
+grid-template-columns:1fr;
+}
+
+}
+
 </style>
 
 </head>
@@ -166,9 +212,9 @@ Educational Control
 </div>
 
 <div class="menu">
-<a href="#">Inicio</a>
-<a href="#">Reportes</a>
-<a href="#">Administrador</a>
+<a href="dashboard-admin.html">Inicio</a>
+<a href="reportes-admin.html">Reportes</a>
+<a href="dashboard-admin.html">Administrador</a>
 </div>
 
 </div>

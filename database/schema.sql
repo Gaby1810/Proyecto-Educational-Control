@@ -155,5 +155,6 @@ INSERT INTO usuarios (nombre, correo, password, rol, dui) VALUES
  '$2b$12$5sZ8qK4Q4LqV5R4cWyP9HuYjxKzC1xK8mFhU8.kK6jH7yT9pQ3vBC',
  'admin', '00000000-1');
 
--- NOTA: el hash anterior es solo placeholder. Usa el script generate-admin.js
+-- NOTA: el hash anterior es solo placeholder. Usa el script seed-admin.js
 -- o registra el admin vía POST /api/auth/register-admin con el token del .env
+-- Para poblar docentes, estudiantes y clases de ejemplo usa: node database/seed-demo.js

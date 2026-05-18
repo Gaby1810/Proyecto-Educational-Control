@@ -37,6 +37,7 @@ educational-control/
 ├── database/
 │   ├── schema.sql             Schema completo con indices y restricciones
 │   └── seed-admin.js          Script para crear el primer admin
+│   └── seed-demo.js           Script para poblar docentes, estudiantes y clases demo
 │
 ├── public/                    Frontend estatico
 │   ├── css/theme.css          Sistema de diseño azul moderno
@@ -75,7 +76,10 @@ mysql -u root -p < database/schema.sql
 # 5. Crear el primer admin
 node database/seed-admin.js
 
-# 6. Iniciar el servidor
+# 6. Cargar datos demo opcionales
+node database/seed-demo.js
+
+# 7. Iniciar el servidor
 npm start
 ```
 
@@ -84,6 +88,14 @@ Abrir el navegador en http://localhost:3000
 ## Credenciales de demo
 
 - **Admin:** admin@demo.sv / Demo1234!
+- **Docente:** docente.demo@demo.sv / Demo1234!
+- **Estudiantes:** ana.lopez@demo.sv / Demo1234!, luis.martinez@demo.sv / Demo1234!, sofia.ramirez@demo.sv / Demo1234!
+
+## Códigos de clase demo
+
+- `MATE1A26`
+- `CIEN1B26`
+- `LENG2A26`
 
 ## Variables de entorno
 
@@ -104,6 +116,7 @@ El diagrama ER y las instrucciones para revisar la base desde AWS están en `doc
 - Prepared statements en todas las queries SQL
 - Subida de archivos con limite de 10MB y validacion de tipo MIME
 - Solo administradores pueden crear otros administradores
+- El panel admin puede poblar datos demo desde la interfaz o con `node database/seed-demo.js`
 
 ## Licencia
 
